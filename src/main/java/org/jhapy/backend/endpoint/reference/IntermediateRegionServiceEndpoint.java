@@ -85,7 +85,7 @@ public class IntermediateRegionServiceEndpoint extends BaseEndpoint {
     String loggerPrefix = getLoggerPrefix("getById");
     try {
       MappingContext context = new MappingContext.Factory().getContext();
-      context.setProperty("iso3Language", query.get_iso3Language());
+      context.setProperty("iso3Language", query.getQueryIso3Language());
 
       return handleResult(loggerPrefix, mapperFacade.map(intermediateRegionService
               .load(query.getId()), org.jhapy.dto.domain.reference.IntermediateRegion.class,
@@ -101,7 +101,7 @@ public class IntermediateRegionServiceEndpoint extends BaseEndpoint {
     String loggerPrefix = getLoggerPrefix("save");
     try {
       MappingContext context = new MappingContext.Factory().getContext();
-      context.setProperty("iso3Language", query.get_iso3Language());
+      context.setProperty("iso3Language", query.getQueryIso3Language());
 
       return handleResult(loggerPrefix, mapperFacade.map(intermediateRegionService
               .save(mapperFacade
