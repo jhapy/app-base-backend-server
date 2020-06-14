@@ -16,18 +16,36 @@
  * limitations under the License.
  */
 
-package org.jhapy.backend.utils;
+package org.jhapy.backend.config;
 
-import org.jhapy.baseserver.utils.DefaultTranslationConverter;
+import lombok.Data;
+import lombok.Getter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * @author jHapy Lead Dev.
- * @version 1.0
- * @since 10/28/19
- */
-public class RuleTranslationConverter extends DefaultTranslationConverter {
+@Getter
+@ConfigurationProperties(prefix = "jHapy")
+public class AppProperties extends org.jhapy.commons.config.AppProperties {
 
-  public RuleTranslationConverter() {
-    super("rule");
+  private final Bootstrap bootstrap = new Bootstrap();
+
+  @Data
+  public static final class Bootstrap {
+
+    private Iso3166 iso3166 = new Iso3166();
+    private CategoryList categoryList = new CategoryList();
+
+    @Data
+    public static final class Iso3166 {
+
+      private Boolean isEnabled;
+      private String file;
+    }
+
+    @Data
+    public static final class CategoryList {
+
+      private Boolean isEnabled;
+      private String file;
+    }
   }
 }

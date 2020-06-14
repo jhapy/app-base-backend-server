@@ -1,3 +1,21 @@
+/*
+ * Copyright 2020-2020 the original author or authors from the JHapy project.
+ *
+ * This file is part of the JHapy project, see https://www.jhapy.org/ for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.jhapy.backend.service.reference;
 
 import java.io.File;
@@ -12,6 +30,16 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.jhapy.backend.config.AppProperties;
+import org.jhapy.backend.domain.graphdb.reference.Country;
+import org.jhapy.backend.domain.graphdb.reference.IntermediateRegion;
+import org.jhapy.backend.domain.graphdb.reference.Region;
+import org.jhapy.backend.domain.graphdb.reference.SubRegion;
+import org.jhapy.backend.repository.graphdb.reference.CountryRepository;
+import org.jhapy.backend.repository.graphdb.reference.IntermediateRegionRepository;
+import org.jhapy.backend.repository.graphdb.reference.RegionRepository;
+import org.jhapy.backend.repository.graphdb.reference.SubRegionRepository;
+import org.jhapy.commons.utils.HasLogger;
 import org.neo4j.ogm.session.Session;
 import org.neo4j.ogm.session.SessionFactory;
 import org.springframework.cache.annotation.CacheEvict;
@@ -22,16 +50,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.jhapy.backend.domain.graphdb.reference.Country;
-import org.jhapy.backend.domain.graphdb.reference.IntermediateRegion;
-import org.jhapy.backend.domain.graphdb.reference.Region;
-import org.jhapy.backend.domain.graphdb.reference.SubRegion;
-import org.jhapy.backend.repository.graphdb.reference.CountryRepository;
-import org.jhapy.backend.repository.graphdb.reference.IntermediateRegionRepository;
-import org.jhapy.backend.repository.graphdb.reference.RegionRepository;
-import org.jhapy.backend.repository.graphdb.reference.SubRegionRepository;
-import org.jhapy.baseserver.config.AppProperties;
-import org.jhapy.commons.utils.HasLogger;
 
 /**
  * @author jHapy Lead Dev.
@@ -39,7 +57,7 @@ import org.jhapy.commons.utils.HasLogger;
  * @since 2019-03-27
  */
 @Service
-@Transactional(readOnly = true)
+@Transactional(readOnly = true, transactionManager = "transactionManager")
 public class CountryServiceImpl implements CountryService, HasLogger {
 
   private final AppProperties appProperties;
