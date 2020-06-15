@@ -196,7 +196,7 @@ public class BaseUserServiceImpl<T extends BaseUser> implements BaseUserService<
   }
 
   private void throwIfDeletingSelf(T user) {
-    if (AppContextThread.getCurrentSecurityUserId().equals(user.getSecurityUserId())) {
+    if (AppContextThread.getCurrentUserId().equals(user.getId().toString())) {
       throw new UserFriendlyDataException(DELETING_SELF_NOT_PERMITTED);
     }
   }
