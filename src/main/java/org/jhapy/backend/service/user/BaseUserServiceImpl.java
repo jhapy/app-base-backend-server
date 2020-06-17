@@ -24,12 +24,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.jhapy.backend.domain.graphdb.user.BaseUser;
 import org.jhapy.backend.repository.graphdb.user.BaseUserRepository;
 import org.jhapy.baseserver.client.ResourceService;
-import org.jhapy.baseserver.client.SecurityUserService;
 import org.jhapy.dto.domain.exception.UserFriendlyDataException;
-import org.jhapy.dto.domain.security.SecurityUser;
-import org.jhapy.dto.serviceQuery.ServiceResult;
 import org.jhapy.dto.serviceQuery.generic.DeleteByStrIdQuery;
-import org.jhapy.dto.serviceQuery.generic.GetByStrIdQuery;
 import org.jhapy.dto.serviceQuery.generic.SaveQuery;
 import org.jhapy.dto.utils.AppContextThread;
 import org.jhapy.dto.utils.StoredFile;
@@ -52,14 +48,11 @@ public class BaseUserServiceImpl<T extends BaseUser> implements BaseUserService<
 
   private final BaseUserRepository<T> userRepository;
   private final ResourceService resourceService;
-  private final SecurityUserService securityUserService;
 
   public BaseUserServiceImpl(BaseUserRepository userRepository,
-      ResourceService resourceService,
-      SecurityUserService securityUserService) {
+      ResourceService resourceService) {
     this.userRepository = userRepository;
     this.resourceService = resourceService;
-    this.securityUserService = securityUserService;
   }
 
   @Override
@@ -110,7 +103,6 @@ public class BaseUserServiceImpl<T extends BaseUser> implements BaseUserService<
   @Override
   @Transactional
   public T save(T entity) {
-    throwIfUserLocked(entity);
 
     Optional<T> _previousValue = Optional.empty();
     if (entity.getId() != null) {
@@ -131,44 +123,6 @@ public class BaseUserServiceImpl<T extends BaseUser> implements BaseUserService<
       entity.setAvatarId(newImage.getId());
     }
 
-    ServiceResult<SecurityUser> _securityUser = securityUserService
-        .getById(new GetByStrIdQuery(entity.getSecurityUserId()));
-    if (_securityUser.getIsSuccess()) {
-      SecurityUser securityUser = _securityUser.getData();
-      boolean hasChanged = false;
-      if ((StringUtils.isNotBlank(securityUser.getFirstName()) && !securityUser.getFirstName()
-          .equalsIgnoreCase(entity.getFirstName())) ||
-          StringUtils.isBlank(securityUser.getFirstName()) && !StringUtils
-              .isNotBlank(securityUser.getFirstName())) {
-        securityUser.setFirstName(entity.getFirstName());
-        hasChanged = true;
-      }
-      if ((StringUtils.isNotBlank(securityUser.getLastName()) && !securityUser.getLastName()
-          .equalsIgnoreCase(entity.getLastName())) ||
-          StringUtils.isBlank(securityUser.getLastName()) && !StringUtils
-              .isNotBlank(securityUser.getLastName())) {
-        securityUser.setLastName(entity.getLastName());
-        hasChanged = true;
-      }
-      if ((StringUtils.isNotBlank(securityUser.getEmail()) && !securityUser.getEmail()
-          .equalsIgnoreCase(entity.getEmail())) ||
-          StringUtils.isBlank(securityUser.getEmail()) && !StringUtils
-              .isNotBlank(securityUser.getEmail())) {
-        securityUser.setEmail(entity.getEmail());
-        hasChanged = true;
-      }
-      if ((StringUtils.isNotBlank(securityUser.getNickName()) && !securityUser.getNickName()
-          .equalsIgnoreCase(entity.getNickName())) ||
-          StringUtils.isBlank(securityUser.getNickName()) && !StringUtils
-              .isNotBlank(securityUser.getNickName())) {
-        securityUser.setNickName(entity.getNickName());
-        hasChanged = true;
-      }
-      if (hasChanged) {
-        securityUserService.save(new SaveQuery<>(securityUser));
-      }
-    }
-
     String fullName = "";
     if (StringUtils.isNotBlank(entity.getFirstName())) {
       fullName += entity.getFirstName();
@@ -186,7 +140,6 @@ public class BaseUserServiceImpl<T extends BaseUser> implements BaseUserService<
   @Transactional
   public void delete(T entity) {
     throwIfDeletingSelf(entity);
-    throwIfUserLocked(entity);
 
     if (entity.getAvatar() != null) {
       resourceService.delete(new DeleteByStrIdQuery(entity.getAvatar().getId()));
@@ -198,15 +151,6 @@ public class BaseUserServiceImpl<T extends BaseUser> implements BaseUserService<
   private void throwIfDeletingSelf(T user) {
     if (AppContextThread.getCurrentUserId().equals(user.getId().toString())) {
       throw new UserFriendlyDataException(DELETING_SELF_NOT_PERMITTED);
-    }
-  }
-
-  private void throwIfUserLocked(T entity) {
-    ServiceResult<SecurityUser> securityUserResult = securityUserService
-        .getById(new GetByStrIdQuery(entity.getSecurityUserId()));
-    if (securityUserResult.getData() != null && !securityUserResult.getData()
-        .isAccountNonLocked()) {
-      throw new UserFriendlyDataException(MODIFY_LOCKED_USER_NOT_PERMITTED);
     }
   }
 }
