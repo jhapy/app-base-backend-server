@@ -150,7 +150,7 @@ public class CountryServiceImpl implements CountryService, HasLogger {
       "subRegionTrl"}, allEntries = true)
   @Transactional
   public void bootstrapCountries() {
-    if (hasBootstrapped || !appProperties.getBootstrap().getIso3166().getIsEnabled()) {
+    if (hasBootstrapped || !appProperties.getBootstrap().getIso3166().isEnabled()) {
       return;
     }
     String loggerPrefix = getLoggerPrefix("bootstrapCountries");

@@ -37,14 +37,14 @@ public class AppProperties extends org.jhapy.commons.config.AppProperties {
     @Data
     public static final class Iso3166 {
 
-      private Boolean isEnabled;
+      private boolean enabled;
       private String file;
     }
 
     @Data
     public static final class CategoryList {
 
-      private Boolean isEnabled;
+      private boolean enabled;
       private String file;
     }
   }
