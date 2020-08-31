@@ -20,9 +20,9 @@ package org.jhapy.backend.repository.graphdb.reference;
 
 import org.jhapy.backend.domain.graphdb.reference.IntermediateRegion;
 import org.jhapy.baseserver.repository.graphdb.BaseRepository;
+import org.neo4j.springframework.data.repository.query.Query;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.neo4j.annotation.Query;
 
 /**
  * @author jHapy Lead Dev.
@@ -32,11 +32,10 @@ import org.springframework.data.neo4j.annotation.Query;
 public interface IntermediateRegionRepository extends BaseRepository<IntermediateRegion> {
 
   @Query(value =
-      "CALL db.INDEX.fulltext.queryNodes('IntermediateRegion-Trl', {name}) YIELD node RETURN node",
-      countQuery = "CALL db.INDEX.fulltext.queryNodes('IntermediateRegion-Trl', {name}) YIELD node RETURN count(node)")
+      "CALL db.INDEX.fulltext.queryNodes('IntermediateRegion-Trl', {name}) YIELD node RETURN node")
   Page<IntermediateRegion> findByName(String name, Pageable pageable);
 
-  @Query("CALL db.INDEX.fulltext.queryNodes('IntermediateRegion-Trl', {name}) YIELD node RETURN count(node)")
+  @Query(value = "CALL db.INDEX.fulltext.queryNodes('IntermediateRegion-Trl', {name}) YIELD node RETURN count(node)", count = true)
   long countByName(String name);
 
   @Query(
