@@ -20,9 +20,9 @@ package org.jhapy.backend.repository.graphdb.reference;
 
 import org.jhapy.backend.domain.graphdb.reference.SubRegion;
 import org.jhapy.baseserver.repository.graphdb.BaseRepository;
-import org.neo4j.springframework.data.repository.query.Query;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.neo4j.annotation.Query;
 
 /**
  * @author jHapy Lead Dev.
@@ -32,10 +32,11 @@ import org.springframework.data.domain.Pageable;
 public interface SubRegionRepository extends BaseRepository<SubRegion> {
 
   @Query(value =
-      "CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', {name}) YIELD node RETURN node")
+      "CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', {name}) YIELD node RETURN node",
+      countQuery = "CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', {name}) YIELD node RETURN count(node)")
   Page<SubRegion> findByName(String name, Pageable pageable);
 
-  @Query(value = "CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', {name}) YIELD node RETURN count(node)", count = true)
+  @Query("CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', {name}) YIELD node RETURN count(node)")
   long countByName(String name);
 
   @Query("MATCH (m:SubRegion),(c:Country) WHERE id(m) = {subRegionId} AND id(c) = {countryId}"

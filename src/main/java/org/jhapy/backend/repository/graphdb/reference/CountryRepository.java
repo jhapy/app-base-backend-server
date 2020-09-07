@@ -25,9 +25,9 @@ import org.jhapy.backend.domain.graphdb.reference.IntermediateRegion;
 import org.jhapy.backend.domain.graphdb.reference.Region;
 import org.jhapy.backend.domain.graphdb.reference.SubRegion;
 import org.jhapy.baseserver.repository.graphdb.BaseRepository;
-import org.neo4j.springframework.data.repository.query.Query;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.neo4j.annotation.Query;
 
 /**
  * @author jHapy Lead Dev.
@@ -36,10 +36,11 @@ import org.springframework.data.domain.Pageable;
  */
 public interface CountryRepository extends BaseRepository<Country> {
 
-  @Query(value = "CALL db.index.fulltext.queryNodes('Country-Trl', {name}) YIELD node RETURN node")
+  @Query(value = "CALL db.index.fulltext.queryNodes('Country-Trl', {name}) YIELD node RETURN node",
+      countQuery = "CALL db.index.fulltext.queryNodes('Country-Trl', {name}) YIELD node RETURN count(node)")
   Page<Country> findByNameLike(String name, Pageable pageable);
 
-  @Query(value = "CALL db.index.fulltext.queryNodes('Country-Trl', {name}) YIELD node RETURN count(node)", count = true)
+  @Query(value = "CALL db.index.fulltext.queryNodes('Country-Trl', {name}) YIELD node RETURN count(node)")
   long countByNameLike(String name);
 
   @Query(value =
@@ -48,23 +49,27 @@ public interface CountryRepository extends BaseRepository<Country> {
           + " OPTIONAL MATCH (m:Country)-[rr:HAS_REGION]-(r:Region)"
           + " OPTIONAL MATCH (m:Country)-[rs:HAS_SUB_REGION]-(s:SubRegion)"
           + " OPTIONAL MATCH (m:Country)-[ri:HAS_INTERMEDIATE_REGION]-(i:IntermediateRegion)"
-          + " WHERE m.iso2  =~ {iso2} OR m.iso3  =~ {iso3} OR id(node) = id(m) RETURN m, rr, r, rs, s, ri, i")
+          + " WHERE m.iso2  =~ {iso2} OR m.iso3  =~ {iso3} OR id(node) = id(m) RETURN m, rr, r, rs, s, ri, i",
+      countQuery = "CALL db.index.fulltext.queryNodes('Country-Trl', {name}) YIELD node "
+          + " MATCH (m:Country)"
+          + " WHERE m.iso2  =~ {iso2} OR m.iso3  =~ {iso3} OR id(node) = id(m) RETURN count(m)")
   Page<Country> findByNameLikeOrIso2LikeOrIso3Like(String name, String iso2, String iso3,
       Pageable pageable);
 
-  @Query(value = "CALL db.index.fulltext.queryNodes('Country-Trl', {name}) YIELD node "
+  @Query("CALL db.index.fulltext.queryNodes('Country-Trl', {name}) YIELD node "
       + " MATCH (m:Country)"
-      + " WHERE m.iso2  =~ {iso2} OR m.iso3  =~ {iso3} OR id(node) = id(m) RETURN count(m)",count = true)
+      + " WHERE m.iso2  =~ {iso2} OR m.iso3  =~ {iso3} OR id(node) = id(m) RETURN count(m)")
   long countByNameLikeOrIso2LikeOrIso3Like(String name, String iso2, String iso3);
 
   @Query(value = "MATCH (m:Country) "
       + " OPTIONAL MATCH (m:Country)-[rr:HAS_REGION]-(r:Region)"
       + " OPTIONAL MATCH (m:Country)-[rs:HAS_SUB_REGION]-(s:SubRegion)"
       + " OPTIONAL MATCH (m:Country)-[ri:HAS_INTERMEDIATE_REGION]-(i:IntermediateRegion)"
-      + " RETURN m, rr, r, rs, s, ri, i")
+      + " RETURN m, rr, r, rs, s, ri, i",
+      countQuery = "MATCH (m:Country) RETURN count(m)")
   Page<Country> findAll(Pageable pageable);
 
-  @Query(value = "MATCH (m:Country) RETURN count(m)", count = true)
+  @Query("MATCH (m:Country) RETURN count(m)")
   long count();
 
   Optional<Country> getByIso2(String iso2);
