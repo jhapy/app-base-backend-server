@@ -22,6 +22,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.jhapy.baseserver.domain.graphdb.BaseEntity;
 import org.jhapy.dto.utils.StoredFile;
+import org.neo4j.ogm.annotation.PostLoad;
 
 /**
  * This class represent a User.
@@ -54,4 +55,13 @@ public class BaseUser extends BaseEntity {
   private StoredFile avatar = null;
 
   private String avatarId = null;
+
+  @org.springframework.data.annotation.Transient
+  @org.neo4j.ogm.annotation.Transient
+  private String previousAvatarId = null;
+
+  @PostLoad
+  public void postLoad() {
+    this.previousAvatarId = avatarId;
+  }
 }

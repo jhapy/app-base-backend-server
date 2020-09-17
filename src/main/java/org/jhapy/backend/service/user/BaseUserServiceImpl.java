@@ -103,18 +103,9 @@ public class BaseUserServiceImpl<T extends BaseUser> implements BaseUserService<
   @Override
   @Transactional
   public T save(T entity) {
-
-    Optional<T> _previousValue = Optional.empty();
-    if (entity.getId() != null) {
-      _previousValue = userRepository.findById(entity.getId());
-    }
-    T previousValue = _previousValue.orElse(null);
-
-    if (previousValue != null) {
-      if (previousValue.getAvatarId() != null && entity.getAvatarId() == null) {
-        // Image change, remove old one
-        resourceService.delete(new DeleteByStrIdQuery(previousValue.getAvatarId()));
-      }
+    if (entity.getPreviousAvatarId() != null && entity.getAvatarId() == null) {
+      // Image change, remove old one
+      resourceService.delete(new DeleteByStrIdQuery(entity.getPreviousAvatarId()));
     }
 
     if (entity.getAvatar() != null && entity.getAvatar().getContent() != null) {
