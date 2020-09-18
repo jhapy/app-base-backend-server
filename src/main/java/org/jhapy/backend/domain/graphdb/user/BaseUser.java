@@ -60,8 +60,13 @@ public class BaseUser extends BaseEntity {
   @org.neo4j.ogm.annotation.Transient
   private String previousAvatarId = null;
 
+  @org.springframework.data.annotation.Transient
+  @org.neo4j.ogm.annotation.Transient
+  private Boolean isPreviouslyLoaded = false;
+
   @PostLoad
   public void postLoad() {
+    this.isPreviouslyLoaded = true;
     this.previousAvatarId = avatarId;
   }
 }
