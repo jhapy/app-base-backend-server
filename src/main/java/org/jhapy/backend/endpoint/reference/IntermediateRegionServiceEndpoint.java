@@ -45,7 +45,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-06-05
  */
 @RestController
-@RequestMapping("/intermediateRegionService")
+@RequestMapping("/api/intermediateRegionService")
 public class IntermediateRegionServiceEndpoint extends BaseEndpoint {
 
   private final IntermediateRegionService intermediateRegionService;

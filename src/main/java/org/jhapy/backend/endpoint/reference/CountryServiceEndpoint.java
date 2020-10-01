@@ -43,7 +43,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-06-05
  */
 @RestController
-@RequestMapping("/countryService")
+@RequestMapping("/api/countryService")
 public class CountryServiceEndpoint extends BaseEndpoint {
 
   private final CountryService countryService;
