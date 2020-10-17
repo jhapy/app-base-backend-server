@@ -1,7 +1,0 @@
-
-MATCH (n:ElementTrl) DETACH DELETE n;
-MATCH (n:Element) DETACH DELETE n;
-MATCH (n:ActionTrl) DETACH DELETE n;
-MATCH (n:Action) DETACH DELETE n;
-MATCH (n:MessageTrl) DETACH DELETE n;
-MATCH (n:Message) DETACH DELETE n;
