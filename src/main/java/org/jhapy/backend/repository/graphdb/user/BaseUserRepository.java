@@ -23,8 +23,7 @@ import org.jhapy.backend.domain.graphdb.user.BaseUser;
 import org.jhapy.baseserver.repository.graphdb.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.neo4j.annotation.Depth;
-import org.springframework.data.neo4j.annotation.Query;
+import org.springframework.data.neo4j.repository.query.Query;
 
 /**
  * @author jHapy Lead Dev.
@@ -35,10 +34,8 @@ public interface BaseUserRepository<T extends BaseUser> extends BaseRepository<T
 
   T findByEmailIgnoreCase(String email);
 
-  @Depth(0)
   T getBySecurityUserId(String securityUserId);
 
-  @Depth(0)
   List<T> getByEmail(String email);
 
   @Query(value = "MATCH (u:BaseUser) WHERE u.email =~ {filter} OR u.firstName =~ {filter} OR u.lastName =~ {filter} RETURN u, c",

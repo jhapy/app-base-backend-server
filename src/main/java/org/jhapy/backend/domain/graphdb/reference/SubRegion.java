@@ -26,9 +26,9 @@ import lombok.ToString;
 import org.jhapy.baseserver.domain.graphdb.BaseEntity;
 import org.jhapy.baseserver.domain.graphdb.EntityTranslations;
 import org.jhapy.baseserver.utils.NameTranslationConverter;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
-import org.neo4j.ogm.annotation.typeconversion.Convert;
+import org.springframework.data.neo4j.core.convert.ConvertWith;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
 /**
  * @author jHapy Lead Dev.
@@ -38,10 +38,10 @@ import org.neo4j.ogm.annotation.typeconversion.Convert;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@NodeEntity
+@Node
 public class SubRegion extends BaseEntity {
 
-  @Convert(NameTranslationConverter.class)
+  @ConvertWith(converter = NameTranslationConverter.class)
   private EntityTranslations names = new EntityTranslations();
 
   @EqualsAndHashCode.Exclude

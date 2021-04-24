@@ -9,7 +9,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.3.7.RELEASE</version>
+    <version>2.4.5</version>
     <relativePath/>
   </parent>
 
@@ -27,12 +27,13 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+      <spring-boot.version>2.4.5</spring-boot.version>
+      <spring-boot-admin.version>2.4.1</spring-boot-admin.version>
+
     <!-- These remain empty unless the corresponding profile is active -->
     <profile.swagger/>
     <profile.tls/>
 
-    <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
-    <spring-boot-admin.version>2.3.1</spring-boot-admin.version>
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
     <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
     <maven.required.version>3.6</maven.required.version>
@@ -41,7 +42,7 @@
     <sonar-maven-plugin.version>3.6.1.1688</sonar-maven-plugin.version>
     <jib-maven-plugin.version>2.6.0</jib-maven-plugin.version>
     <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
-    <lombok.version>1.18.18</lombok.version>
+      <lombok.version>1.18.20</lombok.version>
 
   </properties>
 

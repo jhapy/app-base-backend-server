@@ -18,11 +18,12 @@
 
 package org.jhapy.backend.domain.graphdb.user;
 
+import javax.persistence.PostLoad;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.jhapy.baseserver.domain.graphdb.BaseEntity;
 import org.jhapy.dto.utils.StoredFile;
-import org.neo4j.ogm.annotation.PostLoad;
+import org.springframework.data.annotation.Transient;
 
 /**
  * This class represent a User.
@@ -50,18 +51,15 @@ public class BaseUser extends BaseEntity {
 
   private String nickName;
 
-  @org.springframework.data.annotation.Transient
-  @org.neo4j.ogm.annotation.Transient
+  @Transient
   private StoredFile avatar = null;
 
   private String avatarId = null;
 
-  @org.springframework.data.annotation.Transient
-  @org.neo4j.ogm.annotation.Transient
+    @Transient
   private String previousAvatarId = null;
 
-  @org.springframework.data.annotation.Transient
-  @org.neo4j.ogm.annotation.Transient
+    @Transient
   private Boolean isPreviouslyLoaded = false;
 
   @PostLoad

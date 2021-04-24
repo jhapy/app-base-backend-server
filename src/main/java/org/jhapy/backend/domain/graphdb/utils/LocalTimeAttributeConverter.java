@@ -21,30 +21,33 @@ package org.jhapy.backend.domain.graphdb.utils;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import org.apache.commons.lang3.StringUtils;
-import org.neo4j.ogm.typeconversion.AttributeConverter;
+import org.neo4j.driver.Value;
+import org.neo4j.driver.Values;
+import org.springframework.data.neo4j.core.convert.Neo4jPersistentPropertyConverter;
 
 /**
  * @author jHapy Lead Dev.
  * @version 1.0
  * @since 2019-05-25
  */
-public class LocalTimeAttributeConverter implements AttributeConverter<LocalTime, String> {
+public class LocalTimeAttributeConverter implements
+    Neo4jPersistentPropertyConverter<LocalTime> {
 
-  @Override
-  public String toGraphProperty(LocalTime localTime) {
-    if (localTime != null) {
-      return localTime.format(DateTimeFormatter.ofPattern("HH:mm"));
-    } else {
-      return null;
+    @Override
+    public Value write(LocalTime localTime) {
+        if (localTime != null) {
+            return Values.value(localTime.format(DateTimeFormatter.ofPattern("HH:mm")));
+        } else {
+            return null;
+        }
     }
-  }
 
-  @Override
-  public LocalTime toEntityAttribute(String s) {
-    if (StringUtils.isNotBlank(s)) {
-      return LocalTime.parse(s, DateTimeFormatter.ofPattern("HH:mm"));
-    } else {
-      return null;
+    @Override
+    public LocalTime read(Value source) {
+        if (StringUtils.isNotBlank(source.asString())) {
+            return LocalTime.parse(source.asString(), DateTimeFormatter.ofPattern("HH:mm"));
+        } else {
+            return null;
+        }
     }
-  }
 }

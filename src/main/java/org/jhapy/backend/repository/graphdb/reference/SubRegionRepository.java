@@ -22,7 +22,7 @@ import org.jhapy.backend.domain.graphdb.reference.SubRegion;
 import org.jhapy.baseserver.repository.graphdb.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.neo4j.annotation.Query;
+import org.springframework.data.neo4j.repository.query.Query;
 
 /**
  * @author jHapy Lead Dev.
