@@ -25,6 +25,7 @@ import org.jhapy.baseserver.domain.graphdb.BaseEntity;
 import org.jhapy.baseserver.domain.graphdb.EntityTranslations;
 import org.jhapy.baseserver.utils.NameTranslationConverter;
 import org.springframework.data.neo4j.core.convert.ConvertWith;
+import org.springframework.data.neo4j.core.schema.CompositeProperty;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -41,7 +42,7 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 @Node
 public class Country extends BaseEntity {
 
-  @ConvertWith(converter = NameTranslationConverter.class)
+  @CompositeProperty(converter = NameTranslationConverter.class)
   private EntityTranslations names = new EntityTranslations();
 
   /**

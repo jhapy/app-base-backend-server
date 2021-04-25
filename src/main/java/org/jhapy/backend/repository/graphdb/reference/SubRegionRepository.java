@@ -32,14 +32,14 @@ import org.springframework.data.neo4j.repository.query.Query;
 public interface SubRegionRepository extends BaseRepository<SubRegion> {
 
   @Query(value =
-      "CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', {name}) YIELD node RETURN node",
-      countQuery = "CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', {name}) YIELD node RETURN count(node)")
+      "CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', $name) YIELD node RETURN node :#{orderBy(#pageable)} SKIP $skip LIMIT $limit",
+      countQuery = "CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', $name) YIELD node RETURN count(node)")
   Page<SubRegion> findByName(String name, Pageable pageable);
 
-  @Query("CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', {name}) YIELD node RETURN count(node)")
+  @Query("CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', $name) YIELD node RETURN count(node)")
   long countByName(String name);
 
-  @Query("MATCH (m:SubRegion),(c:Country) WHERE id(m) = {subRegionId} AND id(c) = {countryId}"
+  @Query("MATCH (m:SubRegion) WITH m MATCH (c:Country) WHERE id(m) = $subRegionId AND id(c) = $countryId"
       + " CREATE (m)-[r:HAS_COUNTRIES]->(c) RETURN m")
   SubRegion addCountryToSubRegion(Long subRegionId, Long countryId);
 }

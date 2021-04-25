@@ -38,10 +38,10 @@ public interface BaseUserRepository<T extends BaseUser> extends BaseRepository<T
 
   List<T> getByEmail(String email);
 
-  @Query(value = "MATCH (u:BaseUser) WHERE u.email =~ {filter} OR u.firstName =~ {filter} OR u.lastName =~ {filter} RETURN u, c",
-      countQuery = "MATCH (u:BaseUser) WHERE u.email =~ {filter} OR u.firstName =~ {filter} OR u.lastName =~ {filter} RETURN count(u)")
+  @Query(value = "MATCH (u:BaseUser) WHERE u.email =~ $filter OR u.firstName =~ $filter OR u.lastName =~ $filter RETURN u, c :#{orderBy(#pageable)} SKIP $skip LIMIT $limit",
+      countQuery = "MATCH (u:BaseUser) WHERE u.email =~ $filter OR u.firstName =~ $filter OR u.lastName =~ $filter RETURN count(u)")
   Page<T> findAnyMatching(String filter, Pageable pageable);
 
-  @Query(value = "MATCH (u:BaseUser) WHERE u.email =~ {filter} OR u.firstName =~ {filter} OR u.lastName =~ {filter} RETURN count(u)")
+  @Query(value = "MATCH (u:BaseUser) WHERE u.email =~ $filter OR u.firstName =~ $filter OR u.lastName =~ $filter RETURN count(u)")
   long countAnyMatching(String filter);
 }

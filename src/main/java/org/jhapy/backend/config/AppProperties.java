@@ -23,7 +23,7 @@ import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Getter
-@ConfigurationProperties(prefix = "jHapy")
+@ConfigurationProperties(prefix = "jhapy")
 public class AppProperties extends org.jhapy.commons.config.AppProperties {
 
   private final Bootstrap bootstrap = new Bootstrap();

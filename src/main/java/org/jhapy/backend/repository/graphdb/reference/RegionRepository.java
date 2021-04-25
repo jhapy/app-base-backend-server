@@ -32,14 +32,14 @@ import org.springframework.data.neo4j.repository.query.Query;
 public interface RegionRepository extends BaseRepository<Region> {
 
   @Query(value =
-      "CALL db.INDEX.fulltext.queryNodes('Region-Trl', {name}) YIELD node RETURN node",
-      countQuery = "CALL db.INDEX.fulltext.queryNodes('Region-Trl', {name}) YIELD node RETURN count(node)")
+      "CALL db.INDEX.fulltext.queryNodes('Region-Trl', $name) YIELD node RETURN node :#{orderBy(#pageable)} SKIP $skip LIMIT $limit",
+      countQuery = "CALL db.INDEX.fulltext.queryNodes('Region-Trl', $name) YIELD node RETURN count(node)")
   Page<Region> findByName(String name, Pageable pageable);
 
-  @Query("CALL db.INDEX.fulltext.queryNodes('Region-Trl', {name}) YIELD node RETURN count(node)")
+  @Query("CALL db.INDEX.fulltext.queryNodes('Region-Trl', $name) YIELD node RETURN count(node)")
   long countByName(String name);
 
-  @Query("MATCH (m:Region),(c:Country) WHERE id(m) = {regionId} AND id(c) = {countryId}"
+  @Query("MATCH (m:Region) WITH m MATCH (c:Country) WHERE id(m) = $regionId AND id(c) = $countryId"
       + " CREATE (m)-[r:HAS_COUNTRIES]->(c) RETURN m")
   Region addCountryToRegion(Long regionId, Long countryId);
 }

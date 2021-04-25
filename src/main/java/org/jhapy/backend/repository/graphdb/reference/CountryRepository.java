@@ -36,36 +36,36 @@ import org.springframework.data.neo4j.repository.query.Query;
  */
 public interface CountryRepository extends BaseRepository<Country> {
 
-  @Query(value = "CALL db.index.fulltext.queryNodes('Country-Trl', {name}) YIELD node RETURN node",
-      countQuery = "CALL db.index.fulltext.queryNodes('Country-Trl', {name}) YIELD node RETURN count(node)")
+  @Query(value = "CALL db.index.fulltext.queryNodes('Country-Trl', $name) YIELD node RETURN node :#{orderBy(#pageable)} SKIP $skip LIMIT $limit",
+      countQuery = "CALL db.index.fulltext.queryNodes('Country-Trl', $name) YIELD node RETURN count(node)")
   Page<Country> findByNameLike(String name, Pageable pageable);
 
-  @Query(value = "CALL db.index.fulltext.queryNodes('Country-Trl', {name}) YIELD node RETURN count(node)")
+  @Query(value = "CALL db.index.fulltext.queryNodes('Country-Trl', $name) YIELD node RETURN count(node)")
   long countByNameLike(String name);
 
   @Query(value =
-      "CALL db.index.fulltext.queryNodes('Country-Trl', {name}) YIELD node "
+      "CALL db.index.fulltext.queryNodes('Country-Trl', $name) YIELD node "
           + " MATCH (m:Country)"
           + " OPTIONAL MATCH (m:Country)-[rr:HAS_REGION]-(r:Region)"
           + " OPTIONAL MATCH (m:Country)-[rs:HAS_SUB_REGION]-(s:SubRegion)"
           + " OPTIONAL MATCH (m:Country)-[ri:HAS_INTERMEDIATE_REGION]-(i:IntermediateRegion)"
-          + " WHERE m.iso2  =~ {iso2} OR m.iso3  =~ {iso3} OR id(node) = id(m) RETURN m, rr, r, rs, s, ri, i",
-      countQuery = "CALL db.index.fulltext.queryNodes('Country-Trl', {name}) YIELD node "
+          + " WHERE m.iso2  =~ $iso2 OR m.iso3  =~ $iso3 OR id(node) = id(m) RETURN m, rr, r, rs, s, ri, i :#{orderBy(#pageable)} SKIP $skip LIMIT $limit",
+      countQuery = "CALL db.index.fulltext.queryNodes('Country-Trl', $name) YIELD node "
           + " MATCH (m:Country)"
-          + " WHERE m.iso2  =~ {iso2} OR m.iso3  =~ {iso3} OR id(node) = id(m) RETURN count(m)")
+          + " WHERE m.iso2  =~ $iso2 OR m.iso3  =~ $iso3 OR id(node) = id(m) RETURN count(m)")
   Page<Country> findByNameLikeOrIso2LikeOrIso3Like(String name, String iso2, String iso3,
       Pageable pageable);
 
-  @Query("CALL db.index.fulltext.queryNodes('Country-Trl', {name}) YIELD node "
+  @Query("CALL db.index.fulltext.queryNodes('Country-Trl', $name) YIELD node "
       + " MATCH (m:Country)"
-      + " WHERE m.iso2  =~ {iso2} OR m.iso3  =~ {iso3} OR id(node) = id(m) RETURN count(m)")
+      + " WHERE m.iso2  =~ $iso2 OR m.iso3  =~ $iso3 OR id(node) = id(m) RETURN count(m)")
   long countByNameLikeOrIso2LikeOrIso3Like(String name, String iso2, String iso3);
 
   @Query(value = "MATCH (m:Country) "
       + " OPTIONAL MATCH (m:Country)-[rr:HAS_REGION]-(r:Region)"
       + " OPTIONAL MATCH (m:Country)-[rs:HAS_SUB_REGION]-(s:SubRegion)"
       + " OPTIONAL MATCH (m:Country)-[ri:HAS_INTERMEDIATE_REGION]-(i:IntermediateRegion)"
-      + " RETURN m, rr, r, rs, s, ri, i",
+      + " RETURN m, rr, r, rs, s, ri, i :#{orderBy(#pageable)} SKIP $skip LIMIT $limit",
       countQuery = "MATCH (m:Country) RETURN count(m)")
   Page<Country> findAll(Pageable pageable);
 
@@ -82,7 +82,7 @@ public interface CountryRepository extends BaseRepository<Country> {
 
   List<Country> findByIntermediateRegion(IntermediateRegion intermediateRegion);
 
-  @Query("MATCH (m:Country) WHERE id(m) = {id} RETURN m")
+  @Query("MATCH (m:Country) WHERE id(m) = $id RETURN m")
   Country getById(Long id);
 
 }
