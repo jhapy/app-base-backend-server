@@ -189,7 +189,7 @@ public class CountryServiceImpl implements CountryService, HasLogger {
           Country country = null;
 
           Iterable<Country> c = neo4jClient.query(
-              "MATCH (m:Country {`name." + language + ".value`: $value}) RETURN m").bindAll(Collections.singletonMap("value", iso3CellCellValue)).fetchAs(Country.class).all();
+              "MATCH (m:Country {`names." + language + ".value`: $value}) RETURN m").bindAll(Collections.singletonMap("value", iso3CellCellValue)).fetchAs(Country.class).all();
           if (c.iterator().hasNext()) {
             country = c.iterator().next();
           }
@@ -209,7 +209,7 @@ public class CountryServiceImpl implements CountryService, HasLogger {
               Region region = null;
 
               Iterable<Region> r = neo4jClient.query(
-                  "MATCH (m:Region {`name." + language + ".value`: $value}) RETURN m").bindAll(Collections
+                  "MATCH (m:Region {`names." + language + ".value`: $value})-[r:HAS_COUNTRIES]-(c:Country) RETURN m, r, c").bindAll(Collections
                       .singletonMap("value", iso3CellCellValue)).fetchAs(Region.class).all();
               if (r.iterator().hasNext()) {
                 region = r.iterator().next();
@@ -223,9 +223,8 @@ public class CountryServiceImpl implements CountryService, HasLogger {
 
               if (!region.getCountries().contains(country)) {
                 region = regionRepository.addCountryToRegion(region.getId(), country.getId());
+                countryRepository.addRegionToCountry(country.getId(), region.getId());
               }
-              country.setRegion(region);
-              countryRepository.save(country);
 
               if (subRegionCell != null) {
                 String subRegionCellValue = subRegionCell.getStringCellValue();
@@ -233,7 +232,7 @@ public class CountryServiceImpl implements CountryService, HasLogger {
                   SubRegion subRegion = null;
 
                   Iterable<SubRegion> sr = neo4jClient.query(
-                      "MATCH (m:SubRegion {`name." + language + ".value`: $value}) RETURN m").bindAll(
+                      "MATCH (m:SubRegion {`names." + language + ".value`: $value})-[r:HAS_COUNTRIES]-(c:Country) RETURN m, r, c").bindAll(
                       Collections
                           .singletonMap("value", iso3CellCellValue)).fetchAs(SubRegion.class).all();
                   if (sr.iterator().hasNext()) {
@@ -247,11 +246,9 @@ public class CountryServiceImpl implements CountryService, HasLogger {
                   }
 
                   if (!subRegion.getCountries().contains(country)) {
-                    subRegion = subRegionRepository
-                        .addCountryToSubRegion(subRegion.getId(), country.getId());
+                    subRegion = subRegionRepository.addCountryToSubRegion(subRegion.getId(), country.getId());
+                    countryRepository.addSubRegionToCountry(country.getId(), subRegion.getId());
                   }
-                  country.setSubRegion(subRegion);
-                  countryRepository.save(country);
 
                   if (intermediateRegionCell != null) {
                     String intermediateRegionCellValue = intermediateRegionCell
@@ -260,7 +257,7 @@ public class CountryServiceImpl implements CountryService, HasLogger {
                       IntermediateRegion intermediateRegion = null;
 
                       Iterable<IntermediateRegion> ir = neo4jClient.query(
-                          "MATCH (m:IntermediateRegion {`name." + language
+                          "MATCH (m:IntermediateRegion {`names." + language
                               + ".value`: $value}) RETURN m").bindAll(Collections
                               .singletonMap("value", intermediateRegionCellValue)).fetchAs(IntermediateRegion.class).all();
                       if (ir.iterator().hasNext()) {
@@ -274,17 +271,12 @@ public class CountryServiceImpl implements CountryService, HasLogger {
                       }
 
                       if (!intermediateRegion.getCountries().contains(country)) {
-                        intermediateRegion = intermediateRegionRepository
-                            .addCountryToIntermediateRegion(intermediateRegion.getId(),
-                                country.getId());
+                        intermediateRegion = intermediateRegionRepository.addCountryToIntermediateRegion(intermediateRegion.getId(), country.getId());
+                        countryRepository.addIntermediateRegionToCountry(country.getId(), intermediateRegion.getId());
                       }
                       if (!intermediateRegion.getRegions().contains(region)) {
-                        intermediateRegion = intermediateRegionRepository
-                            .addRegionToIntermediateRegion(intermediateRegion.getId(),
-                                region.getId());
+                        intermediateRegion = intermediateRegionRepository.addRegionToIntermediateRegion(intermediateRegion.getId(), region.getId());
                       }
-                      country.setIntermediateRegion(intermediateRegion);
-                      countryRepository.save(country);
                     }
                   }
                 }

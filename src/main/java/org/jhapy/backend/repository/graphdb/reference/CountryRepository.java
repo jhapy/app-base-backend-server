@@ -85,4 +85,19 @@ public interface CountryRepository extends BaseRepository<Country> {
   @Query("MATCH (m:Country) WHERE id(m) = $id RETURN m")
   Country getById(Long id);
 
+  @Query(
+      "MATCH (m:Country) WITH m MATCH (c:IntermediateRegion) WHERE id(m) = $countryId AND id(c) = $intermediateRegionId"
+          + " CREATE (m)-[r:HAS_INTERMEDIATE_REGION]->(c) RETURN m")
+  Country addIntermediateRegionToCountry(Long countryId,Long intermediateRegionId);
+
+  @Query(
+      "MATCH (m:Country) WITH m MATCH (c:Region) WHERE id(m) = $countryId AND id(c) = $regionId"
+          + " CREATE (m)-[r:HAS_REGION]->(c) RETURN m")
+  Country addRegionToCountry(Long countryId,Long regionId);
+
+  @Query(
+      "MATCH (m:Country) WITH m MATCH (c:SubRegion) WHERE id(m) = $countryId AND id(c) = $subRegionId"
+          + " CREATE (m)-[r:HAS_SUB_REGION]->(c) RETURN m")
+  Country addSubRegionToCountry(Long countryId,Long subRegionId);
+
 }
