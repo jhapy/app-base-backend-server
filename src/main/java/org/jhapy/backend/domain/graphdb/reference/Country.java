@@ -18,8 +18,10 @@
 
 package org.jhapy.backend.domain.graphdb.reference;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.jhapy.baseserver.domain.graphdb.BaseEntity;
 import org.jhapy.baseserver.domain.graphdb.EntityTranslations;
@@ -37,9 +39,11 @@ import org.springframework.data.neo4j.core.schema.Relationship;
  * @since 2019-03-06
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@Node
+@Node("Country")
 public class Country extends BaseEntity {
 
   @CompositeProperty(converter = NameTranslationConverter.class)

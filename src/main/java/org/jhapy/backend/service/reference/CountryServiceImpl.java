@@ -45,7 +45,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.neo4j.core.Neo4jClient;
+import org.springframework.data.neo4j.core.Neo4jTemplate;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,7 +65,7 @@ public class CountryServiceImpl implements CountryService, HasLogger {
   private final SubRegionRepository subRegionRepository;
   private final IntermediateRegionRepository intermediateRegionRepository;
 
-    private final Neo4jClient neo4jClient;
+    private final Neo4jTemplate neo4jTemplate;
 
     private boolean hasBootstrapped = false;
 
@@ -73,14 +73,13 @@ public class CountryServiceImpl implements CountryService, HasLogger {
       AppProperties appProperties, CountryRepository countryRepository,
       RegionRepository regionRepository,
       SubRegionRepository subRegionRepository,
-      IntermediateRegionRepository intermediateRegionRepository,
-      Neo4jClient neo4jClient) {
+      IntermediateRegionRepository intermediateRegionRepository, Neo4jTemplate neo4jTemplate) {
     this.appProperties = appProperties;
     this.countryRepository = countryRepository;
     this.regionRepository = regionRepository;
     this.subRegionRepository = subRegionRepository;
     this.intermediateRegionRepository = intermediateRegionRepository;
-    this.neo4jClient = neo4jClient;
+    this.neo4jTemplate = neo4jTemplate;
   }
 
   @Override
@@ -184,23 +183,19 @@ public class CountryServiceImpl implements CountryService, HasLogger {
         Cell subRegionCell = row.getCell(4);
         Cell intermediateRegionCell = row.getCell(5);
 
-        String iso3CellCellValue = iso3Cell.getStringCellValue();
-        if (StringUtils.isNotBlank(iso3CellCellValue)) {
+        String nameCellValue = nameCell.getStringCellValue();
+        if (StringUtils.isNotBlank(nameCellValue)) {
           Country country = null;
+          Optional<Country> c = neo4jTemplate.findOne("MATCH (m:Country {`names." + language + ".value`: $value}) RETURN m", Collections.singletonMap("value", nameCellValue), Country.class);
 
-          Iterable<Country> c = neo4jClient.query(
-              "MATCH (m:Country {`names." + language + ".value`: $value}) RETURN m").bindAll(Collections.singletonMap("value", iso3CellCellValue)).fetchAs(Country.class).all();
-          if (c.iterator().hasNext()) {
-            country = c.iterator().next();
-          }
-
-          if (country == null) {
+          if (c.isEmpty()) {
             country = new Country();
             country.setIso2(iso2Cell.getStringCellValue());
             country.setIso3(iso3Cell.getStringCellValue());
-            country.getNames().setTranslation(language, nameCell.getStringCellValue()
-            );
+            country.getNames().setTranslation(language, nameCellValue);
             country = countryRepository.save(country);
+          } else {
+            country = c.get();
           }
 
           if (regionCell != null) {
@@ -208,17 +203,16 @@ public class CountryServiceImpl implements CountryService, HasLogger {
             if (StringUtils.isNotBlank(regionCellValue)) {
               Region region = null;
 
-              Iterable<Region> r = neo4jClient.query(
-                  "MATCH (m:Region {`names." + language + ".value`: $value})-[r:HAS_COUNTRIES]-(c:Country) RETURN m, r, c").bindAll(Collections
-                      .singletonMap("value", iso3CellCellValue)).fetchAs(Region.class).all();
-              if (r.iterator().hasNext()) {
-                region = r.iterator().next();
-              }
+              Optional<Region> r = neo4jTemplate.findOne(
+                  "MATCH (m:Region {`names." + language + ".value`: $value})-[r:HAS_COUNTRIES]-(c:Country) RETURN m, collect(r),collect(c)", Collections
+                      .singletonMap("value", regionCellValue), Region.class);
 
-              if (region == null) {
+              if (r.isEmpty()) {
                 region = new Region();
                 region.getNames().setTranslation(language, regionCellValue);
                 region = regionRepository.save(region);
+              } else {
+                region = r.get();
               }
 
               if (!region.getCountries().contains(country)) {
@@ -231,18 +225,16 @@ public class CountryServiceImpl implements CountryService, HasLogger {
                 if (StringUtils.isNotBlank(subRegionCellValue)) {
                   SubRegion subRegion = null;
 
-                  Iterable<SubRegion> sr = neo4jClient.query(
-                      "MATCH (m:SubRegion {`names." + language + ".value`: $value})-[r:HAS_COUNTRIES]-(c:Country) RETURN m, r, c").bindAll(
+                  Optional<SubRegion> sr = neo4jTemplate.findOne(
+                      "MATCH (m:SubRegion {`names." + language + ".value`: $value})-[r:HAS_COUNTRIES]-(c:Country) RETURN m, collect(r),collect(c)",
                       Collections
-                          .singletonMap("value", iso3CellCellValue)).fetchAs(SubRegion.class).all();
-                  if (sr.iterator().hasNext()) {
-                    subRegion = sr.iterator().next();
-                  }
-
-                  if (subRegion == null) {
+                          .singletonMap("value", subRegionCellValue), SubRegion.class );
+                  if (sr.isEmpty()) {
                     subRegion = new SubRegion();
                     subRegion.getNames().setTranslation(language, subRegionCellValue);
                     subRegion = subRegionRepository.save(subRegion);
+                  } else {
+                    subRegion = sr.get();
                   }
 
                   if (!subRegion.getCountries().contains(country)) {
@@ -256,18 +248,16 @@ public class CountryServiceImpl implements CountryService, HasLogger {
                     if (StringUtils.isNotBlank(intermediateRegionCellValue)) {
                       IntermediateRegion intermediateRegion = null;
 
-                      Iterable<IntermediateRegion> ir = neo4jClient.query(
+                      Optional<IntermediateRegion> ir = neo4jTemplate.findOne(
                           "MATCH (m:IntermediateRegion {`names." + language
-                              + ".value`: $value}) RETURN m").bindAll(Collections
-                              .singletonMap("value", intermediateRegionCellValue)).fetchAs(IntermediateRegion.class).all();
-                      if (ir.iterator().hasNext()) {
-                        intermediateRegion = ir.iterator().next();
-                      }
-
-                      if (intermediateRegion == null) {
+                              + ".value`: $value}) RETURN m", Collections
+                              .singletonMap("value", intermediateRegionCellValue), IntermediateRegion.class);
+                      if (ir.isEmpty()) {
                         intermediateRegion = new IntermediateRegion();
-                        intermediateRegion.getNames().setTranslation(language, subRegionCellValue);
+                        intermediateRegion.getNames().setTranslation(language, intermediateRegionCellValue);
                         intermediateRegion = intermediateRegionRepository.save(intermediateRegion);
+                      } else {
+                        intermediateRegion = ir.get();
                       }
 
                       if (!intermediateRegion.getCountries().contains(country)) {
