@@ -33,21 +33,21 @@ import org.springframework.data.neo4j.core.convert.Neo4jPersistentPropertyConver
 public class LocalTimeAttributeConverter implements
     Neo4jPersistentPropertyConverter<LocalTime> {
 
-    @Override
-    public Value write(LocalTime localTime) {
-        if (localTime != null) {
-            return Values.value(localTime.format(DateTimeFormatter.ofPattern("HH:mm")));
-        } else {
-            return null;
-        }
+  @Override
+  public Value write(LocalTime localTime) {
+    if (localTime != null) {
+      return Values.value(localTime.format(DateTimeFormatter.ofPattern("HH:mm")));
+    } else {
+      return null;
     }
+  }
 
-    @Override
-    public LocalTime read(Value source) {
-        if (StringUtils.isNotBlank(source.asString())) {
-            return LocalTime.parse(source.asString(), DateTimeFormatter.ofPattern("HH:mm"));
-        } else {
-            return null;
-        }
+  @Override
+  public LocalTime read(Value source) {
+    if (StringUtils.isNotBlank(source.asString())) {
+      return LocalTime.parse(source.asString(), DateTimeFormatter.ofPattern("HH:mm"));
+    } else {
+      return null;
     }
+  }
 }

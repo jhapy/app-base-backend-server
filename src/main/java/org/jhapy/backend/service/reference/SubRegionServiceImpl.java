@@ -53,7 +53,7 @@ public class SubRegionServiceImpl implements SubRegionService, HasLogger {
   }
 
   @Override
-  public Page<SubRegion> findAnyMatching(String filter, String iso3Language, Pageable pageable) {
+  public Page<SubRegion> findAnyMatching(String filter, Boolean showInactive, Pageable pageable) {
     if (StringUtils.isNotBlank(filter)) {
       return subRegionRepository.findByName(filter, pageable);
     } else {
@@ -62,7 +62,7 @@ public class SubRegionServiceImpl implements SubRegionService, HasLogger {
   }
 
   @Override
-  public long countAnyMatching(String filter, String iso3Language) {
+  public long countAnyMatching(String filter, Boolean showInactive) {
     if (StringUtils.isNotBlank(filter)) {
       return subRegionRepository.countByName(filter);
     } else {

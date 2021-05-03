@@ -39,7 +39,6 @@ public class BaseUserConverter {
 
   @Bean
   public void utilsConverters() {
-    orikaBeanMapper.addMapper(BaseUser.class, org.jhapy.dto.domain.user.BaseUser.class);
-    orikaBeanMapper.addMapper(org.jhapy.dto.domain.user.BaseUser.class, BaseUser.class);
+     orikaBeanMapper.addMapper(BaseUser.class, org.jhapy.dto.domain.user.BaseUser.class);
   }
 }

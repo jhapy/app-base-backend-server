@@ -56,10 +56,10 @@ public class BaseUser extends BaseEntity {
 
   private String avatarId = null;
 
-    @Transient
+  @Transient
   private String previousAvatarId = null;
 
-    @Transient
+  @Transient
   private Boolean isPreviouslyLoaded = false;
 
   @PostLoad

@@ -33,9 +33,5 @@ public interface RegionService extends CrudGraphdbService<Region> {
 
   List<Region> findAll();
 
-  Page<Region> findAnyMatching(String filter, String iso3Language, Pageable pageable);
-
-  long countAnyMatching(String filter, String iso3Language);
-
   Region getById(Long id);
 }

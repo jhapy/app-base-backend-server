@@ -20,6 +20,8 @@ package org.jhapy.backend.endpoint.reference;
 
 import org.jhapy.backend.domain.graphdb.reference.Country;
 import org.jhapy.backend.service.reference.CountryService;
+import org.jhapy.baseserver.endpoint.BaseGraphDbEndpoint;
+import org.jhapy.baseserver.service.CrudGraphdbService;
 import org.jhapy.commons.endpoint.BaseEndpoint;
 import org.jhapy.commons.utils.OrikaBeanMapper;
 import org.jhapy.dto.serviceQuery.ServiceResult;
@@ -44,7 +46,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/countryService")
-public class CountryServiceEndpoint extends BaseEndpoint {
+public class CountryServiceEndpoint extends
+    BaseGraphDbEndpoint<Country, org.jhapy.dto.domain.reference.Country> {
 
   private final CountryService countryService;
 
@@ -54,43 +57,19 @@ public class CountryServiceEndpoint extends BaseEndpoint {
     this.countryService = countryService;
   }
 
-  @PostMapping(value = "/findAnyMatching")
-  public ResponseEntity<ServiceResult> findAnyMatching(@RequestBody FindAnyMatchingQuery query) {
-    String loggerPrefix = getLoggerPrefix("findAnyMatching");
-    try {
-      Page<Country> result = countryService
-          .findAnyMatching(query.getFilter(),
-              mapperFacade.map(query.getPageable(),
-                  Pageable.class, getOrikaContext(query)));
-      return handleResult(loggerPrefix,
-          mapperFacade
-              .map(result, org.jhapy.dto.utils.Page.class, getOrikaContext(query)));
-    } catch (Throwable t) {
-      return handleResult(loggerPrefix, t);
-    }
+  @Override
+  protected CrudGraphdbService<Country> getService() {
+    return countryService;
   }
 
-  @PostMapping(value = "/countAnyMatching")
-  public ResponseEntity<ServiceResult> countAnyMatching(@RequestBody CountAnyMatchingQuery query) {
-    String loggerPrefix = getLoggerPrefix("countAnyMatching");
-    try {
-      return handleResult(loggerPrefix, countryService.countAnyMatching(query.getFilter()));
-    } catch (Throwable t) {
-      return handleResult(loggerPrefix, t);
-    }
+  @Override
+  protected Class<Country> getEntityClass() {
+    return Country.class;
   }
 
-  @PostMapping(value = "/getById")
-  public ResponseEntity<ServiceResult> getById(@RequestBody GetByIdQuery query) {
-    String loggerPrefix = getLoggerPrefix("getById");
-    try {
-      return handleResult(loggerPrefix, mapperFacade
-          .map(countryService.load(query.getId()),
-              org.jhapy.dto.domain.reference.Country.class,
-              getOrikaContext(query)));
-    } catch (Throwable t) {
-      return handleResult(loggerPrefix, t);
-    }
+  @Override
+  protected Class<org.jhapy.dto.domain.reference.Country> getDtoClass() {
+    return org.jhapy.dto.domain.reference.Country.class;
   }
 
   @PostMapping(value = "/getByIso2OrIso3")
@@ -100,32 +79,6 @@ public class CountryServiceEndpoint extends BaseEndpoint {
       return handleResult(loggerPrefix,
           mapperFacade.map(countryService.getByIso2OrIso3(query.getIso2OrIso3Name()),
               org.jhapy.dto.domain.reference.Country.class, getOrikaContext(query)));
-    } catch (Throwable t) {
-      return handleResult(loggerPrefix, t);
-    }
-  }
-
-  @PostMapping(value = "/save")
-  public ResponseEntity<ServiceResult> save(
-      @RequestBody SaveQuery<org.jhapy.dto.domain.reference.Country> query) {
-    String loggerPrefix = getLoggerPrefix("save");
-    try {
-      return handleResult(loggerPrefix, mapperFacade.map(countryService
-              .save(mapperFacade
-                  .map(query.getEntity(), Country.class, getOrikaContext(query))),
-          org.jhapy.dto.domain.reference.Country.class, getOrikaContext(query)));
-    } catch (Throwable t) {
-      return handleResult(loggerPrefix, t);
-    }
-  }
-
-  @PostMapping(value = "/delete")
-  public ResponseEntity<ServiceResult> delete(@RequestBody DeleteByIdQuery query) {
-    String loggerPrefix = getLoggerPrefix("delete");
-    try {
-      countryService
-          .delete(query.getId());
-      return handleResult(loggerPrefix);
     } catch (Throwable t) {
       return handleResult(loggerPrefix, t);
     }

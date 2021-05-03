@@ -39,7 +39,8 @@ public interface SubRegionRepository extends BaseRepository<SubRegion> {
   @Query("CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', $name) YIELD node RETURN count(node)")
   long countByName(String name);
 
-  @Query("MATCH (m:SubRegion) WITH m MATCH (c:Country) WHERE id(m) = $subRegionId AND id(c) = $countryId"
-      + " CREATE (m)-[r:HAS_COUNTRIES]->(c) RETURN m")
+  @Query(
+      "MATCH (m:SubRegion) WITH m MATCH (c:Country) WHERE id(m) = $subRegionId AND id(c) = $countryId"
+          + " CREATE (m)-[r:HAS_COUNTRIES]->(c) RETURN m")
   SubRegion addCountryToSubRegion(Long subRegionId, Long countryId);
 }

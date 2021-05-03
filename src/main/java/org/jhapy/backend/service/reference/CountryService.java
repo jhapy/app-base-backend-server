@@ -30,10 +30,6 @@ import org.springframework.data.domain.Pageable;
  */
 public interface CountryService extends CrudGraphdbService<Country> {
 
-  Page<Country> findAnyMatching(String filter, Pageable pageable);
-
-  long countAnyMatching(String filter);
-
   Country getById(Long id);
 
   Country getByIso2OrIso3(String iso2OrIso3Name);

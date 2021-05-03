@@ -53,7 +53,7 @@ public class IntermediateRegionServiceImpl implements IntermediateRegionService,
   }
 
   @Override
-  public Page<IntermediateRegion> findAnyMatching(String filter, String iso3Language,
+  public Page<IntermediateRegion> findAnyMatching(String filter, Boolean showInactive,
       Pageable pageable) {
     if (StringUtils.isNotBlank(filter)) {
       return intermediateRegionRepository.findByName(filter, pageable);
@@ -63,7 +63,7 @@ public class IntermediateRegionServiceImpl implements IntermediateRegionService,
   }
 
   @Override
-  public long countAnyMatching(String filter, String iso3Language) {
+  public long countAnyMatching(String filter, Boolean showInactive) {
     if (StringUtils.isNotBlank(filter)) {
       return intermediateRegionRepository.countByName(filter);
     } else {

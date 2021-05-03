@@ -33,9 +33,5 @@ public interface SubRegionService extends CrudGraphdbService<SubRegion> {
 
   List<SubRegion> findAll();
 
-  Page<SubRegion> findAnyMatching(String filter, String iso3Language, Pageable pageable);
-
-  long countAnyMatching(String filter, String iso3Language);
-
   SubRegion getById(Long id);
 }

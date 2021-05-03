@@ -20,6 +20,8 @@ package org.jhapy.backend.endpoint.reference;
 
 import org.jhapy.backend.domain.graphdb.reference.SubRegion;
 import org.jhapy.backend.service.reference.SubRegionService;
+import org.jhapy.baseserver.endpoint.BaseGraphDbEndpoint;
+import org.jhapy.baseserver.service.CrudGraphdbService;
 import org.jhapy.commons.endpoint.BaseEndpoint;
 import org.jhapy.commons.utils.OrikaBeanMapper;
 import org.jhapy.dto.serviceQuery.ServiceResult;
@@ -43,7 +45,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/subSubRegionService")
-public class SubRegionServiceEndpoint extends BaseEndpoint {
+public class SubRegionServiceEndpoint extends BaseGraphDbEndpoint<SubRegion, org.jhapy.dto.domain.reference.SubRegion> {
 
   private final SubRegionService subSubRegionService;
 
@@ -53,67 +55,18 @@ public class SubRegionServiceEndpoint extends BaseEndpoint {
     this.subSubRegionService = subSubRegionService;
   }
 
-  @PostMapping(value = "/findAnyMatching")
-  public ResponseEntity<ServiceResult> findAnyMatching(@RequestBody FindAnyMatchingQuery query) {
-    String loggerPrefix = getLoggerPrefix("findAnyMatching");
-    try {
-      Page<SubRegion> result = subSubRegionService
-          .findAnyMatching(query.getFilter(), query.getIso3Language(),
-              mapperFacade.map(query.getPageable(),
-                  Pageable.class, getOrikaContext(query)));
-      return handleResult(loggerPrefix,
-          mapperFacade
-              .map(result, org.jhapy.dto.utils.Page.class, getOrikaContext(query)));
-    } catch (Throwable t) {
-      return handleResult(loggerPrefix, t);
-    }
+  @Override
+  protected CrudGraphdbService<SubRegion> getService() {
+    return subSubRegionService;
   }
 
-  @PostMapping(value = "/countAnyMatching")
-  public ResponseEntity<ServiceResult> countAnyMatching(@RequestBody CountAnyMatchingQuery query) {
-    String loggerPrefix = getLoggerPrefix("countAnyMatching");
-    try {
-      return handleResult(loggerPrefix, subSubRegionService
-          .countAnyMatching(query.getFilter(), query.getIso3Language()));
-    } catch (Throwable t) {
-      return handleResult(loggerPrefix, t);
-    }
+  @Override
+  protected Class<SubRegion> getEntityClass() {
+    return SubRegion.class;
   }
 
-  @PostMapping(value = "/getById")
-  public ResponseEntity<ServiceResult> getById(@RequestBody GetByIdQuery query) {
-    String loggerPrefix = getLoggerPrefix("getById");
-    try {
-      return handleResult(loggerPrefix, mapperFacade.map(subSubRegionService
-              .load(query.getId()), org.jhapy.dto.domain.reference.SubRegion.class,
-          getOrikaContext(query)));
-    } catch (Throwable t) {
-      return handleResult(loggerPrefix, t);
-    }
-  }
-
-  @PostMapping(value = "/save")
-  public ResponseEntity<ServiceResult> save(
-      @RequestBody SaveQuery<org.jhapy.dto.domain.reference.SubRegion> query) {
-    String loggerPrefix = getLoggerPrefix("save");
-    try {
-      return handleResult(loggerPrefix, mapperFacade.map(subSubRegionService
-              .save(mapperFacade
-                  .map(query.getEntity(), SubRegion.class, getOrikaContext(query))),
-          org.jhapy.dto.domain.reference.SubRegion.class, getOrikaContext(query)));
-    } catch (Throwable t) {
-      return handleResult(loggerPrefix, t);
-    }
-  }
-
-  @PostMapping(value = "/delete")
-  public ResponseEntity<ServiceResult> delete(@RequestBody DeleteByIdQuery query) {
-    String loggerPrefix = getLoggerPrefix("delete");
-    try {
-      subSubRegionService.delete(query.getId());
-      return handleResult(loggerPrefix);
-    } catch (Throwable t) {
-      return handleResult(loggerPrefix, t);
-    }
+  @Override
+  protected Class<org.jhapy.dto.domain.reference.SubRegion> getDtoClass() {
+    return org.jhapy.dto.domain.reference.SubRegion.class;
   }
 }

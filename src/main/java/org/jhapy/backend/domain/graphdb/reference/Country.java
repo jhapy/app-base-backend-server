@@ -25,8 +25,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.jhapy.baseserver.domain.graphdb.BaseEntity;
 import org.jhapy.baseserver.domain.graphdb.EntityTranslations;
-import org.jhapy.baseserver.utils.NameTranslationConverter;
-import org.springframework.data.neo4j.core.convert.ConvertWith;
+import org.jhapy.baseserver.utils.DefaultTranslationConverter;
 import org.springframework.data.neo4j.core.schema.CompositeProperty;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
@@ -46,7 +45,7 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 @Node("Country")
 public class Country extends BaseEntity {
 
-  @CompositeProperty(converter = NameTranslationConverter.class)
+  @CompositeProperty(converter = DefaultTranslationConverter.class)
   private EntityTranslations names = new EntityTranslations();
 
   /**

@@ -41,9 +41,7 @@ public class UtilsConverter {
   @Bean
   public void utilsConverters() {
     orikaBeanMapper.addMapper(LatLng.class, org.jhapy.dto.utils.LatLng.class);
-    orikaBeanMapper.addMapper(org.jhapy.dto.utils.LatLng.class, LatLng.class);
 
     orikaBeanMapper.addMapper(MapBounds.class, org.jhapy.dto.utils.MapBounds.class);
-    orikaBeanMapper.addMapper(org.jhapy.dto.utils.MapBounds.class, MapBounds.class);
   }
 }
