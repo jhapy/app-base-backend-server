@@ -22,17 +22,9 @@ import org.jhapy.backend.domain.graphdb.reference.Country;
 import org.jhapy.backend.service.reference.CountryService;
 import org.jhapy.baseserver.endpoint.BaseGraphDbEndpoint;
 import org.jhapy.baseserver.service.CrudGraphdbService;
-import org.jhapy.commons.endpoint.BaseEndpoint;
 import org.jhapy.commons.utils.OrikaBeanMapper;
 import org.jhapy.dto.serviceQuery.ServiceResult;
-import org.jhapy.dto.serviceQuery.generic.CountAnyMatchingQuery;
-import org.jhapy.dto.serviceQuery.generic.DeleteByIdQuery;
-import org.jhapy.dto.serviceQuery.generic.FindAnyMatchingQuery;
-import org.jhapy.dto.serviceQuery.generic.GetByIdQuery;
-import org.jhapy.dto.serviceQuery.generic.SaveQuery;
 import org.jhapy.dto.serviceQuery.reference.country.GetByIso2OrIso3Query;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -74,7 +66,7 @@ public class CountryServiceEndpoint extends
 
   @PostMapping(value = "/getByIso2OrIso3")
   public ResponseEntity<ServiceResult> getByIso2OrIso3(@RequestBody GetByIso2OrIso3Query query) {
-    String loggerPrefix = getLoggerPrefix("getByIso2OrIso3");
+    var loggerPrefix = getLoggerPrefix("getByIso2OrIso3");
     try {
       return handleResult(loggerPrefix,
           mapperFacade.map(countryService.getByIso2OrIso3(query.getIso2OrIso3Name()),

@@ -48,7 +48,7 @@ public class RegionServiceImpl implements RegionService, HasLogger {
 
   @Override
   public List<Region> findAll() {
-    return StreamSupport.stream(regionRepository.findAll().spliterator(), false)
+    return regionRepository.findAll().stream()
         .collect(Collectors.toList());
   }
 

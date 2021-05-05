@@ -22,19 +22,7 @@ import org.jhapy.backend.domain.graphdb.reference.SubRegion;
 import org.jhapy.backend.service.reference.SubRegionService;
 import org.jhapy.baseserver.endpoint.BaseGraphDbEndpoint;
 import org.jhapy.baseserver.service.CrudGraphdbService;
-import org.jhapy.commons.endpoint.BaseEndpoint;
 import org.jhapy.commons.utils.OrikaBeanMapper;
-import org.jhapy.dto.serviceQuery.ServiceResult;
-import org.jhapy.dto.serviceQuery.generic.DeleteByIdQuery;
-import org.jhapy.dto.serviceQuery.generic.GetByIdQuery;
-import org.jhapy.dto.serviceQuery.generic.SaveQuery;
-import org.jhapy.dto.serviceQuery.reference.subRegion.CountAnyMatchingQuery;
-import org.jhapy.dto.serviceQuery.reference.subRegion.FindAnyMatchingQuery;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,7 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/subSubRegionService")
-public class SubRegionServiceEndpoint extends BaseGraphDbEndpoint<SubRegion, org.jhapy.dto.domain.reference.SubRegion> {
+public class SubRegionServiceEndpoint extends
+    BaseGraphDbEndpoint<SubRegion, org.jhapy.dto.domain.reference.SubRegion> {
 
   private final SubRegionService subSubRegionService;
 

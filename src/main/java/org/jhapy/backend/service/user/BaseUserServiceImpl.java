@@ -57,8 +57,7 @@ public class BaseUserServiceImpl<T extends BaseUser> implements BaseUserService<
 
   @Override
   public T getBySecurityUserId(String securityUserId) {
-    T result = userRepository.getBySecurityUserId(securityUserId);
-    return result;
+    return userRepository.getBySecurityUserId(securityUserId);
   }
 
   @Override

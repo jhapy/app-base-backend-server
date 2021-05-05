@@ -18,26 +18,11 @@
 
 package org.jhapy.backend.endpoint.reference;
 
-import java.util.List;
-import ma.glasnost.orika.MappingContext;
 import org.jhapy.backend.domain.graphdb.reference.IntermediateRegion;
 import org.jhapy.backend.service.reference.IntermediateRegionService;
 import org.jhapy.baseserver.endpoint.BaseGraphDbEndpoint;
 import org.jhapy.baseserver.service.CrudGraphdbService;
-import org.jhapy.commons.endpoint.BaseEndpoint;
 import org.jhapy.commons.utils.OrikaBeanMapper;
-import org.jhapy.dto.serviceQuery.BaseRemoteQuery;
-import org.jhapy.dto.serviceQuery.ServiceResult;
-import org.jhapy.dto.serviceQuery.generic.DeleteByIdQuery;
-import org.jhapy.dto.serviceQuery.generic.GetByIdQuery;
-import org.jhapy.dto.serviceQuery.generic.SaveQuery;
-import org.jhapy.dto.serviceQuery.reference.intermediateRegion.CountAnyMatchingQuery;
-import org.jhapy.dto.serviceQuery.reference.intermediateRegion.FindAnyMatchingQuery;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

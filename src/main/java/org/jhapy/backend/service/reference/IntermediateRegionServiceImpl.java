@@ -48,7 +48,7 @@ public class IntermediateRegionServiceImpl implements IntermediateRegionService,
 
   @Override
   public List<IntermediateRegion> findAll() {
-    return StreamSupport.stream(intermediateRegionRepository.findAll().spliterator(), false)
+    return intermediateRegionRepository.findAll().stream()
         .collect(Collectors.toList());
   }
 

@@ -151,7 +151,7 @@ public class CountryServiceImpl implements CountryService, HasLogger {
     if (hasBootstrapped || !appProperties.getBootstrap().getIso3166().isEnabled()) {
       return;
     }
-    String loggerPrefix = getLoggerPrefix("bootstrapCountries");
+    var loggerPrefix = getLoggerPrefix("bootstrapCountries");
 
     String language = "en";
     try (Workbook workbook = WorkbookFactory

@@ -21,8 +21,6 @@ package org.jhapy.backend.service.reference;
 import java.util.List;
 import org.jhapy.backend.domain.graphdb.reference.SubRegion;
 import org.jhapy.baseserver.service.CrudGraphdbService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 /**
  * @author jHapy Lead Dev.

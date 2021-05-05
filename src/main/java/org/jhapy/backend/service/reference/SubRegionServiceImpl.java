@@ -48,7 +48,7 @@ public class SubRegionServiceImpl implements SubRegionService, HasLogger {
 
   @Override
   public List<SubRegion> findAll() {
-    return StreamSupport.stream(subRegionRepository.findAll().spliterator(), false)
+    return subRegionRepository.findAll().stream()
         .collect(Collectors.toList());
   }
 
