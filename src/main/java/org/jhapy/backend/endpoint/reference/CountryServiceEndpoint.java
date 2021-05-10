@@ -67,12 +67,9 @@ public class CountryServiceEndpoint extends
   @PostMapping(value = "/getByIso2OrIso3")
   public ResponseEntity<ServiceResult> getByIso2OrIso3(@RequestBody GetByIso2OrIso3Query query) {
     var loggerPrefix = getLoggerPrefix("getByIso2OrIso3");
-    try {
+
       return handleResult(loggerPrefix,
           mapperFacade.map(countryService.getByIso2OrIso3(query.getIso2OrIso3Name()),
               org.jhapy.dto.domain.reference.Country.class, getOrikaContext(query)));
-    } catch (Throwable t) {
-      return handleResult(loggerPrefix, t);
-    }
   }
 }
