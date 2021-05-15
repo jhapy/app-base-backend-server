@@ -20,7 +20,6 @@ package org.jhapy.backend.service.reference;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import org.apache.commons.lang3.StringUtils;
 import org.jhapy.backend.domain.graphdb.reference.Region;
 import org.jhapy.backend.repository.graphdb.reference.RegionRepository;

@@ -68,8 +68,8 @@ public class CountryServiceEndpoint extends
   public ResponseEntity<ServiceResult> getByIso2OrIso3(@RequestBody GetByIso2OrIso3Query query) {
     var loggerPrefix = getLoggerPrefix("getByIso2OrIso3");
 
-      return handleResult(loggerPrefix,
-          mapperFacade.map(countryService.getByIso2OrIso3(query.getIso2OrIso3Name()),
-              org.jhapy.dto.domain.reference.Country.class, getOrikaContext(query)));
+    return handleResult(loggerPrefix,
+        mapperFacade.map(countryService.getByIso2OrIso3(query.getIso2OrIso3Name()),
+            org.jhapy.dto.domain.reference.Country.class, getOrikaContext(query)));
   }
 }
