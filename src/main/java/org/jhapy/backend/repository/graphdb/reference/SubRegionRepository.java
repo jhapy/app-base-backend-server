@@ -35,13 +35,14 @@ public interface SubRegionRepository extends BaseRepository<SubRegion> {
   @Query(value =
       "CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', $name) YIELD node RETURN node :#{orderBy(#pageable)} SKIP $skip LIMIT $limit",
       countQuery = "CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', $name) YIELD node RETURN count(node)")
-  Page<SubRegion> findByName(@Param("name")String name, Pageable pageable);
+  Page<SubRegion> findByName(@Param("name") String name, Pageable pageable);
 
   @Query("CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', $name) YIELD node RETURN count(node)")
-  long countByName(@Param("name")String name);
+  long countByName(@Param("name") String name);
 
   @Query(
       "MATCH (m:SubRegion) WITH m MATCH (c:Country) WHERE id(m) = $subRegionId AND id(c) = $countryId"
           + " CREATE (m)-[r:HAS_COUNTRIES]->(c) RETURN m")
-  SubRegion addCountryToSubRegion(@Param("subRegionId")Long subRegionId,@Param("countryId") Long countryId);
+  SubRegion addCountryToSubRegion(@Param("subRegionId") Long subRegionId,
+      @Param("countryId") Long countryId);
 }

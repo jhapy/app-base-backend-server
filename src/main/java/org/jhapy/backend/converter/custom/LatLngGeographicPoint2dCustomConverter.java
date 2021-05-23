@@ -18,16 +18,10 @@
 
 package org.jhapy.backend.converter.custom;
 
-import java.util.stream.Collectors;
 import ma.glasnost.orika.MappingContext;
 import ma.glasnost.orika.converter.BidirectionalConverter;
 import ma.glasnost.orika.metadata.Type;
 import org.jhapy.dto.utils.LatLng;
-import org.jhapy.dto.utils.Pageable;
-import org.jhapy.dto.utils.Pageable.Order.Direction;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.neo4j.types.GeographicPoint2d;
 import org.springframework.stereotype.Component;
 

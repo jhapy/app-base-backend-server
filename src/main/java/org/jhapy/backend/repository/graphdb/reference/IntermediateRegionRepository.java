@@ -35,18 +35,20 @@ public interface IntermediateRegionRepository extends BaseRepository<Intermediat
   @Query(value =
       "CALL db.INDEX.fulltext.queryNodes('IntermediateRegion-Trl', $name) YIELD node RETURN node :#{orderBy(#pageable)} SKIP $skip LIMIT $limit",
       countQuery = "CALL db.INDEX.fulltext.queryNodes('IntermediateRegion-Trl', $name) YIELD node RETURN count(node)")
-  Page<IntermediateRegion> findByName(@Param("name")String name, Pageable pageable);
+  Page<IntermediateRegion> findByName(@Param("name") String name, Pageable pageable);
 
   @Query("CALL db.INDEX.fulltext.queryNodes('IntermediateRegion-Trl', $name) YIELD node RETURN count(node)")
-  long countByName(@Param("name")String name);
+  long countByName(@Param("name") String name);
 
   @Query(
       "MATCH (m:IntermediateRegion) WITH m MATCH (c:Country) WHERE id(m) = $intermediateRegionId AND id(c) = $countryId"
           + " CREATE (m)-[r:HAS_COUNTRIES]->(c) RETURN m")
-  IntermediateRegion addCountryToIntermediateRegion(@Param("intermediateRegionId")Long intermediateRegionId, @Param("countryId")Long countryId);
+  IntermediateRegion addCountryToIntermediateRegion(
+      @Param("intermediateRegionId") Long intermediateRegionId, @Param("countryId") Long countryId);
 
   @Query(
       "MATCH (m:IntermediateRegion) WITH m MATCH (c:Region) WHERE id(m) = $intermediateRegionId AND id(c) = $regionId"
           + " CREATE (m)-[r:HAS_REGIONS]->(c) RETURN m")
-  IntermediateRegion addRegionToIntermediateRegion(@Param("intermediateRegionId")Long intermediateRegionId, @Param("regionId")Long regionId);
+  IntermediateRegion addRegionToIntermediateRegion(
+      @Param("intermediateRegionId") Long intermediateRegionId, @Param("regionId") Long regionId);
 }

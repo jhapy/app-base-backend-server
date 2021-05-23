@@ -18,11 +18,13 @@
 
 package org.jhapy.backend.endpoint.reference;
 
+import java.util.List;
+import java.util.Map;
+import org.jhapy.backend.converter.BackendConverterV2;
 import org.jhapy.backend.domain.graphdb.reference.SubRegion;
 import org.jhapy.backend.service.reference.SubRegionService;
 import org.jhapy.baseserver.endpoint.BaseGraphDbEndpoint;
 import org.jhapy.baseserver.service.CrudGraphdbService;
-import org.jhapy.commons.utils.OrikaBeanMapper;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,30 +34,51 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-06-05
  */
 @RestController
-@RequestMapping("/api/subSubRegionService")
+@RequestMapping("/api/subSubSubRegionService")
 public class SubRegionServiceEndpoint extends
     BaseGraphDbEndpoint<SubRegion, org.jhapy.dto.domain.reference.SubRegion> {
 
-  private final SubRegionService subSubRegionService;
+  private final SubRegionService subRegionService;
 
-  public SubRegionServiceEndpoint(SubRegionService subSubRegionService,
-      OrikaBeanMapper mapperFacade) {
-    super(mapperFacade);
-    this.subSubRegionService = subSubRegionService;
+  public SubRegionServiceEndpoint(SubRegionService subRegionService,
+      BackendConverterV2 converter) {
+    super(converter);
+    this.subRegionService = subRegionService;
   }
+
+  protected BackendConverterV2 getConverter() {
+    return (BackendConverterV2) converter;
+  }
+
+  @Override
+  protected org.jhapy.dto.domain.reference.SubRegion convertToDto(
+      SubRegion domain, Map<String, Object> context) {
+    return getConverter().convertToDto(domain, context);
+  }
+
+  @Override
+  protected List<org.jhapy.dto.domain.reference.SubRegion> convertToDtos(
+      Iterable<SubRegion> domains, Map<String, Object> context) {
+    return getConverter().convertToDtoSubRegions(domains, context);
+  }
+
+  @Override
+  protected SubRegion convertToDomain(org.jhapy.dto.domain.reference.SubRegion dto,
+      Map<String, Object> context) {
+    return getConverter().convertToDomain(dto, context);
+  }
+
+  @Override
+  protected List<SubRegion> convertToDomains(Iterable<org.jhapy.dto.domain.reference.SubRegion> dto,
+      Map<String, Object> context) {
+    return getConverter().convertToDomainSubRegions(dto, context);
+  }
+
 
   @Override
   protected CrudGraphdbService<SubRegion> getService() {
-    return subSubRegionService;
+    return subRegionService;
   }
 
-  @Override
-  protected Class<SubRegion> getEntityClass() {
-    return SubRegion.class;
-  }
 
-  @Override
-  protected Class<org.jhapy.dto.domain.reference.SubRegion> getDtoClass() {
-    return org.jhapy.dto.domain.reference.SubRegion.class;
-  }
 }

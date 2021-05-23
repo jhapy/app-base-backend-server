@@ -18,11 +18,13 @@
 
 package org.jhapy.backend.endpoint.reference;
 
+import java.util.List;
+import java.util.Map;
+import org.jhapy.backend.converter.BackendConverterV2;
 import org.jhapy.backend.domain.graphdb.reference.Region;
 import org.jhapy.backend.service.reference.RegionService;
 import org.jhapy.baseserver.endpoint.BaseGraphDbEndpoint;
 import org.jhapy.baseserver.service.CrudGraphdbService;
-import org.jhapy.commons.utils.OrikaBeanMapper;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,9 +41,37 @@ public class RegionServiceEndpoint extends
   private final RegionService regionService;
 
   public RegionServiceEndpoint(RegionService regionService,
-      OrikaBeanMapper mapperFacade) {
-    super(mapperFacade);
+      BackendConverterV2 converter) {
+    super(converter);
     this.regionService = regionService;
+  }
+
+  protected BackendConverterV2 getConverter() {
+    return (BackendConverterV2) converter;
+  }
+
+  @Override
+  protected org.jhapy.dto.domain.reference.Region convertToDto(Region domain,
+      Map<String, Object> context) {
+    return getConverter().convertToDto(domain, context);
+  }
+
+  @Override
+  protected List<org.jhapy.dto.domain.reference.Region> convertToDtos(Iterable<Region> domains,
+      Map<String, Object> context) {
+    return getConverter().convertToDtoRegions(domains, context);
+  }
+
+  @Override
+  protected Region convertToDomain(org.jhapy.dto.domain.reference.Region dto,
+      Map<String, Object> context) {
+    return getConverter().convertToDomain(dto, context);
+  }
+
+  @Override
+  protected List<Region> convertToDomains(Iterable<org.jhapy.dto.domain.reference.Region> dto,
+      Map<String, Object> context) {
+    return getConverter().convertToDomainRegions(dto, context);
   }
 
   @Override
@@ -49,13 +79,5 @@ public class RegionServiceEndpoint extends
     return regionService;
   }
 
-  @Override
-  protected Class<Region> getEntityClass() {
-    return Region.class;
-  }
 
-  @Override
-  protected Class<org.jhapy.dto.domain.reference.Region> getDtoClass() {
-    return org.jhapy.dto.domain.reference.Region.class;
-  }
 }

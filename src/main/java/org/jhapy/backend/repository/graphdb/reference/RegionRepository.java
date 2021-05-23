@@ -35,12 +35,12 @@ public interface RegionRepository extends BaseRepository<Region> {
   @Query(value =
       "CALL db.INDEX.fulltext.queryNodes('Region-Trl', $name) YIELD node RETURN node :#{orderBy(#pageable)} SKIP $skip LIMIT $limit",
       countQuery = "CALL db.INDEX.fulltext.queryNodes('Region-Trl', $name) YIELD node RETURN count(node)")
-  Page<Region> findByName(@Param("name")String name, Pageable pageable);
+  Page<Region> findByName(@Param("name") String name, Pageable pageable);
 
   @Query("CALL db.INDEX.fulltext.queryNodes('Region-Trl', $name) YIELD node RETURN count(node)")
-  long countByName(@Param("name")String name);
+  long countByName(@Param("name") String name);
 
   @Query("MATCH (m:Region) WITH m MATCH (c:Country) WHERE id(m) = $regionId AND id(c) = $countryId"
       + " CREATE (m)-[r:HAS_COUNTRIES]->(c) RETURN m")
-  Region addCountryToRegion(@Param("regionId")Long regionId, @Param("countryId")Long countryId);
+  Region addCountryToRegion(@Param("regionId") Long regionId, @Param("countryId") Long countryId);
 }
