@@ -1,9 +1,11 @@
 package org.jhapy.backend.converter;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.jhapy.baseserver.converter.BaseConverterV2;
+import org.jhapy.dto.domain.Comment;
 import org.jhapy.dto.domain.reference.Country;
 import org.jhapy.dto.domain.reference.IntermediateRegion;
 import org.jhapy.dto.domain.reference.Region;
@@ -15,6 +17,7 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+import org.springframework.context.annotation.Primary;
 
 /**
  * @author Alexandre Clavaud.
@@ -23,7 +26,6 @@ import org.mapstruct.MappingTarget;
  */
 @Mapper(componentModel = "spring")
 public abstract class BackendConverterV2 extends BaseConverterV2 {
-
   public abstract BaseUser convertToDto(org.jhapy.backend.domain.graphdb.user.BaseUser domain);
 
   public abstract org.jhapy.backend.domain.graphdb.user.BaseUser convertToDomain(BaseUser dto);
@@ -112,7 +114,7 @@ public abstract class BackendConverterV2 extends BaseConverterV2 {
       @Context Map<String, Object> context) {
     String iso3Language = (String) context.get("iso3Language");
     if (StringUtils.isNotBlank(iso3Language)) {
-      dto.setName(domain.getNames().getTranslation(iso3Language));
+      domain.getNames().setTranslation(iso3Language, dto.getName());
     }
   }
 
@@ -121,7 +123,7 @@ public abstract class BackendConverterV2 extends BaseConverterV2 {
       @MappingTarget Country dto, @Context Map<String, Object> context) {
     String iso3Language = (String) context.get("iso3Language");
     if (StringUtils.isNotBlank(iso3Language)) {
-      domain.getNames().setTranslation(iso3Language, dto.getName());
+      dto.setName(domain.getNames().getTranslation(iso3Language));
     }
   }
 
@@ -131,7 +133,7 @@ public abstract class BackendConverterV2 extends BaseConverterV2 {
       @Context Map<String, Object> context) {
     String iso3Language = (String) context.get("iso3Language");
     if (StringUtils.isNotBlank(iso3Language)) {
-      dto.setName(domain.getNames().getTranslation(iso3Language));
+      domain.getNames().setTranslation(iso3Language, dto.getName());
     }
   }
 
@@ -140,7 +142,7 @@ public abstract class BackendConverterV2 extends BaseConverterV2 {
       @MappingTarget IntermediateRegion dto, @Context Map<String, Object> context) {
     String iso3Language = (String) context.get("iso3Language");
     if (StringUtils.isNotBlank(iso3Language)) {
-      domain.getNames().setTranslation(iso3Language, dto.getName());
+      dto.setName(domain.getNames().getTranslation(iso3Language));
     }
   }
 
@@ -148,9 +150,10 @@ public abstract class BackendConverterV2 extends BaseConverterV2 {
   protected void afterConvert(Region dto,
       @MappingTarget org.jhapy.backend.domain.graphdb.reference.Region domain,
       @Context Map<String, Object> context) {
+
     String iso3Language = (String) context.get("iso3Language");
     if (StringUtils.isNotBlank(iso3Language)) {
-      dto.setName(domain.getNames().getTranslation(iso3Language));
+      domain.getNames().setTranslation(iso3Language, dto.getName());
     }
   }
 
@@ -159,7 +162,7 @@ public abstract class BackendConverterV2 extends BaseConverterV2 {
       @MappingTarget Region dto, @Context Map<String, Object> context) {
     String iso3Language = (String) context.get("iso3Language");
     if (StringUtils.isNotBlank(iso3Language)) {
-      domain.getNames().setTranslation(iso3Language, dto.getName());
+      dto.setName(domain.getNames().getTranslation(iso3Language));
     }
   }
 
@@ -169,7 +172,7 @@ public abstract class BackendConverterV2 extends BaseConverterV2 {
       @Context Map<String, Object> context) {
     String iso3Language = (String) context.get("iso3Language");
     if (StringUtils.isNotBlank(iso3Language)) {
-      dto.setName(domain.getNames().getTranslation(iso3Language));
+      domain.getNames().setTranslation(iso3Language, dto.getName());
     }
   }
 
@@ -178,7 +181,7 @@ public abstract class BackendConverterV2 extends BaseConverterV2 {
       @MappingTarget SubRegion dto, @Context Map<String, Object> context) {
     String iso3Language = (String) context.get("iso3Language");
     if (StringUtils.isNotBlank(iso3Language)) {
-      domain.getNames().setTranslation(iso3Language, dto.getName());
+      dto.setName(domain.getNames().getTranslation(iso3Language));
     }
   }
 }

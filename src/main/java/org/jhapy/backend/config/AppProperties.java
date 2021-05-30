@@ -29,20 +29,12 @@ public class AppProperties extends org.jhapy.commons.config.AppProperties {
   private final Bootstrap bootstrap = new Bootstrap();
 
   @Data
-  public static final class Bootstrap {
+  public static class Bootstrap {
 
     private Iso3166 iso3166 = new Iso3166();
-    private CategoryList categoryList = new CategoryList();
 
     @Data
     public static final class Iso3166 {
-
-      private boolean enabled;
-      private String file;
-    }
-
-    @Data
-    public static final class CategoryList {
 
       private boolean enabled;
       private String file;
