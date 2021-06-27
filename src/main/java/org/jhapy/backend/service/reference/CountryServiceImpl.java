@@ -92,14 +92,17 @@ public class CountryServiceImpl implements CountryService, HasLogger {
     if (StringUtils.isNotBlank(filter)) {
       String filterExpr = filter + "*";
       Sort sort = pageable.getSort();
-      Sort.Order dataSort = sort.iterator().next();
-      Sort newSort = Sort.by(dataSort.getDirection(), "node.`" + dataSort.getProperty() + "`");
+      Sort newSort = Sort.unsorted();
+      if ( sort.isSorted() ) {
+        Sort.Order dataSort = sort.iterator().next();
+        newSort = Sort.by(dataSort.getDirection(), "node.`" + dataSort.getProperty() + "`");
+      }
       PageRequest newPageRequest = PageRequest
           .of(pageable.getPageNumber(), pageable.getPageSize(), newSort);
       return countryRepository
           .findByNameLikeOrIso2LikeOrIso3Like(filterExpr, filterExpr, filterExpr, newPageRequest);
     } else {
-      if (pageable.getSort().iterator().next().getProperty().startsWith("name")) {
+      if (pageable.getSort().isSorted() && pageable.getSort().iterator().next().getProperty().startsWith("name")) {
         Sort sort = pageable.getSort();
         Sort.Order dataSort = sort.iterator().next();
         Sort newSort = Sort.by(dataSort.getDirection(), "m.`" + dataSort.getProperty() + "`");
