@@ -21,6 +21,8 @@ package org.jhapy.backend.service.reference;
 import org.jhapy.backend.domain.graphdb.reference.Country;
 import org.jhapy.baseserver.service.CrudGraphdbService;
 
+import java.util.UUID;
+
 /**
  * @author jHapy Lead Dev.
  * @version 1.0
@@ -28,7 +30,7 @@ import org.jhapy.baseserver.service.CrudGraphdbService;
  */
 public interface CountryService extends CrudGraphdbService<Country> {
 
-  Country getById(Long id);
+  Country getById(UUID id);
 
   Country getByIso2OrIso3(String iso2OrIso3Name);
 }

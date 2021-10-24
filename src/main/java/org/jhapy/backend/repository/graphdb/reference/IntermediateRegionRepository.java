@@ -25,6 +25,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.UUID;
+
 /**
  * @author jHapy Lead Dev.
  * @version 1.0
@@ -32,23 +34,26 @@ import org.springframework.data.repository.query.Param;
  */
 public interface IntermediateRegionRepository extends BaseRepository<IntermediateRegion> {
 
-  @Query(value =
-      "CALL db.INDEX.fulltext.queryNodes('IntermediateRegion-Trl', $name) YIELD node RETURN node :#{orderBy(#pageable)} SKIP $skip LIMIT $limit",
-      countQuery = "CALL db.INDEX.fulltext.queryNodes('IntermediateRegion-Trl', $name) YIELD node RETURN count(node)")
+  @Query(
+      value =
+          "CALL db.INDEX.fulltext.queryNodes('IntermediateRegion-Trl', $name) YIELD node RETURN node :#{orderBy(#pageable)} SKIP $skip LIMIT $limit",
+      countQuery =
+          "CALL db.INDEX.fulltext.queryNodes('IntermediateRegion-Trl', $name) YIELD node RETURN count(node)")
   Page<IntermediateRegion> findByName(@Param("name") String name, Pageable pageable);
 
-  @Query("CALL db.INDEX.fulltext.queryNodes('IntermediateRegion-Trl', $name) YIELD node RETURN count(node)")
+  @Query(
+      "CALL db.INDEX.fulltext.queryNodes('IntermediateRegion-Trl', $name) YIELD node RETURN count(node)")
   long countByName(@Param("name") String name);
 
   @Query(
       "MATCH (m:IntermediateRegion) WITH m MATCH (c:Country) WHERE id(m) = $intermediateRegionId AND id(c) = $countryId"
           + " CREATE (m)-[r:HAS_COUNTRIES]->(c) RETURN m")
   IntermediateRegion addCountryToIntermediateRegion(
-      @Param("intermediateRegionId") Long intermediateRegionId, @Param("countryId") Long countryId);
+      @Param("intermediateRegionId") UUID intermediateRegionId, @Param("countryId") UUID countryId);
 
   @Query(
       "MATCH (m:IntermediateRegion) WITH m MATCH (c:Region) WHERE id(m) = $intermediateRegionId AND id(c) = $regionId"
           + " CREATE (m)-[r:HAS_REGIONS]->(c) RETURN m")
   IntermediateRegion addRegionToIntermediateRegion(
-      @Param("intermediateRegionId") Long intermediateRegionId, @Param("regionId") Long regionId);
+      @Param("intermediateRegionId") UUID intermediateRegionId, @Param("regionId") UUID regionId);
 }

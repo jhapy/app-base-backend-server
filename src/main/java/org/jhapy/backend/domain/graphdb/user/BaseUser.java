@@ -18,17 +18,19 @@
 
 package org.jhapy.backend.domain.graphdb.user;
 
-import javax.persistence.PostLoad;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.jhapy.baseserver.domain.graphdb.BaseEntity;
 import org.jhapy.dto.utils.StoredFile;
 import org.springframework.data.annotation.Transient;
 
+import javax.persistence.PostLoad;
+import java.util.UUID;
+
 /**
  * This class represent a User.
  *
- * A User can be : - System user (internal) - Admin user (to administer the platform) - Player or
+ * <p>A User can be : - System user (internal) - Admin user (to administer the platform) - Player or
  * Fan - Owner of a Place
  *
  * @author jHapy Lead Dev
@@ -51,16 +53,13 @@ public class BaseUser extends BaseEntity {
 
   private String nickName;
 
-  @Transient
-  private StoredFile avatar = null;
+  @Transient private StoredFile avatar = null;
 
-  private String avatarId = null;
+  private UUID avatarId = null;
 
-  @Transient
-  private String previousAvatarId = null;
+  @Transient private UUID previousAvatarId = null;
 
-  @Transient
-  private Boolean isPreviouslyLoaded = false;
+  @Transient private Boolean isPreviouslyLoaded = false;
 
   @PostLoad
   public void postLoad() {

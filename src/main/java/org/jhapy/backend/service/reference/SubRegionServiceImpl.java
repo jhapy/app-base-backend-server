@@ -18,8 +18,6 @@
 
 package org.jhapy.backend.service.reference;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.jhapy.backend.domain.graphdb.reference.SubRegion;
 import org.jhapy.backend.repository.graphdb.reference.SubRegionRepository;
@@ -29,6 +27,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author jHapy Lead Dev.
@@ -47,8 +49,7 @@ public class SubRegionServiceImpl implements SubRegionService, HasLogger {
 
   @Override
   public List<SubRegion> findAll() {
-    return subRegionRepository.findAll().stream()
-        .collect(Collectors.toList());
+    return subRegionRepository.findAll().stream().collect(Collectors.toList());
   }
 
   @Override
@@ -70,12 +71,12 @@ public class SubRegionServiceImpl implements SubRegionService, HasLogger {
   }
 
   @Override
-  public SubRegion getById(Long id) {
+  public SubRegion getById(UUID id) {
     return subRegionRepository.findById(id).get();
   }
 
   @Override
-  public Neo4jRepository<SubRegion, Long> getRepository() {
+  public Neo4jRepository<SubRegion, UUID> getRepository() {
     return subRegionRepository;
   }
 }

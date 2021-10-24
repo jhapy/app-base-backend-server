@@ -1,13 +1,11 @@
 package org.jhapy.backend.converter;
 
-import java.util.List;
-import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.jhapy.baseserver.converter.BaseConverterV2;
-import org.jhapy.dto.domain.reference.Country;
-import org.jhapy.dto.domain.reference.IntermediateRegion;
-import org.jhapy.dto.domain.reference.Region;
-import org.jhapy.dto.domain.reference.SubRegion;
+import org.jhapy.dto.domain.reference.CountryDTO;
+import org.jhapy.dto.domain.reference.IntermediateRegionDTO;
+import org.jhapy.dto.domain.reference.RegionDTO;
+import org.jhapy.dto.domain.reference.SubRegionDTO;
 import org.jhapy.dto.domain.user.BaseUser;
 import org.jhapy.dto.utils.LatLng;
 import org.jhapy.dto.utils.MapBounds;
@@ -15,6 +13,9 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Alexandre Clavaud.
@@ -52,62 +53,66 @@ public abstract class BackendConverterV2 extends BaseConverterV2 {
   public abstract List<org.jhapy.backend.domain.graphdb.utils.MapBounds> convertToDomainMapBounds(
       Iterable<MapBounds> dtos);
 
-  public abstract Country convertToDto(org.jhapy.backend.domain.graphdb.reference.Country domain,
+  public abstract CountryDTO convertToDto(
+      org.jhapy.backend.domain.graphdb.reference.Country domain,
       @Context Map<String, Object> context);
 
-  public abstract org.jhapy.backend.domain.graphdb.reference.Country convertToDomain(Country dto,
-      @Context Map<String, Object> context);
+  public abstract org.jhapy.backend.domain.graphdb.reference.Country convertToDomain(
+      CountryDTO dto, @Context Map<String, Object> context);
 
-  public abstract List<Country> convertToDtoCountries(
+  public abstract List<CountryDTO> convertToDtoCountries(
       Iterable<org.jhapy.backend.domain.graphdb.reference.Country> domains,
       @Context Map<String, Object> context);
 
   public abstract List<org.jhapy.backend.domain.graphdb.reference.Country> convertToDomainCountries(
-      Iterable<Country> dtos, @Context Map<String, Object> context);
+      Iterable<CountryDTO> dtos, @Context Map<String, Object> context);
 
-  public abstract Region convertToDto(org.jhapy.backend.domain.graphdb.reference.Region domain,
+  public abstract RegionDTO convertToDto(
+      org.jhapy.backend.domain.graphdb.reference.Region domain,
       @Context Map<String, Object> context);
 
-  public abstract org.jhapy.backend.domain.graphdb.reference.Region convertToDomain(Region dto,
-      @Context Map<String, Object> context);
+  public abstract org.jhapy.backend.domain.graphdb.reference.Region convertToDomain(
+      RegionDTO dto, @Context Map<String, Object> context);
 
-  public abstract List<Region> convertToDtoRegions(
+  public abstract List<RegionDTO> convertToDtoRegions(
       Iterable<org.jhapy.backend.domain.graphdb.reference.Region> domains,
       @Context Map<String, Object> context);
 
   public abstract List<org.jhapy.backend.domain.graphdb.reference.Region> convertToDomainRegions(
-      Iterable<Region> dtos, @Context Map<String, Object> context);
+      Iterable<RegionDTO> dtos, @Context Map<String, Object> context);
 
-  public abstract IntermediateRegion convertToDto(
+  public abstract IntermediateRegionDTO convertToDto(
       org.jhapy.backend.domain.graphdb.reference.IntermediateRegion domain,
       @Context Map<String, Object> context);
 
   public abstract org.jhapy.backend.domain.graphdb.reference.IntermediateRegion convertToDomain(
-      IntermediateRegion dto, @Context Map<String, Object> context);
+      IntermediateRegionDTO dto, @Context Map<String, Object> context);
 
-  public abstract List<IntermediateRegion> convertToDtoIntermediateRegions(
+  public abstract List<IntermediateRegionDTO> convertToDtoIntermediateRegions(
       Iterable<org.jhapy.backend.domain.graphdb.reference.IntermediateRegion> domains,
       @Context Map<String, Object> context);
 
-  public abstract List<org.jhapy.backend.domain.graphdb.reference.IntermediateRegion> convertToDomainIntermediateRegions(
-      Iterable<IntermediateRegion> dtos, @Context Map<String, Object> context);
+  public abstract List<org.jhapy.backend.domain.graphdb.reference.IntermediateRegion>
+      convertToDomainIntermediateRegions(
+          Iterable<IntermediateRegionDTO> dtos, @Context Map<String, Object> context);
 
-  public abstract SubRegion convertToDto(
+  public abstract SubRegionDTO convertToDto(
       org.jhapy.backend.domain.graphdb.reference.SubRegion domain,
       @Context Map<String, Object> context);
 
   public abstract org.jhapy.backend.domain.graphdb.reference.SubRegion convertToDomain(
-      SubRegion dto, @Context Map<String, Object> context);
+      SubRegionDTO dto, @Context Map<String, Object> context);
 
-  public abstract List<SubRegion> convertToDtoSubRegions(
+  public abstract List<SubRegionDTO> convertToDtoSubRegions(
       Iterable<org.jhapy.backend.domain.graphdb.reference.SubRegion> domains,
       @Context Map<String, Object> context);
 
-  public abstract List<org.jhapy.backend.domain.graphdb.reference.SubRegion> convertToDomainSubRegions(
-      Iterable<SubRegion> dtos, @Context Map<String, Object> context);
+  public abstract List<org.jhapy.backend.domain.graphdb.reference.SubRegion>
+      convertToDomainSubRegions(Iterable<SubRegionDTO> dtos, @Context Map<String, Object> context);
 
   @AfterMapping
-  protected void afterConvert(Country dto,
+  protected void afterConvert(
+      CountryDTO dto,
       @MappingTarget org.jhapy.backend.domain.graphdb.reference.Country domain,
       @Context Map<String, Object> context) {
     String iso3Language = (String) context.get("iso3Language");
@@ -117,8 +122,10 @@ public abstract class BackendConverterV2 extends BaseConverterV2 {
   }
 
   @AfterMapping
-  protected void afterConvert(org.jhapy.backend.domain.graphdb.reference.Country domain,
-      @MappingTarget Country dto, @Context Map<String, Object> context) {
+  protected void afterConvert(
+      org.jhapy.backend.domain.graphdb.reference.Country domain,
+      @MappingTarget CountryDTO dto,
+      @Context Map<String, Object> context) {
     String iso3Language = (String) context.get("iso3Language");
     if (StringUtils.isNotBlank(iso3Language)) {
       dto.setName(domain.getNames().getTranslation(iso3Language));
@@ -126,7 +133,8 @@ public abstract class BackendConverterV2 extends BaseConverterV2 {
   }
 
   @AfterMapping
-  protected void afterConvert(IntermediateRegion dto,
+  protected void afterConvert(
+      IntermediateRegionDTO dto,
       @MappingTarget org.jhapy.backend.domain.graphdb.reference.IntermediateRegion domain,
       @Context Map<String, Object> context) {
     String iso3Language = (String) context.get("iso3Language");
@@ -136,8 +144,10 @@ public abstract class BackendConverterV2 extends BaseConverterV2 {
   }
 
   @AfterMapping
-  protected void afterConvert(org.jhapy.backend.domain.graphdb.reference.IntermediateRegion domain,
-      @MappingTarget IntermediateRegion dto, @Context Map<String, Object> context) {
+  protected void afterConvert(
+      org.jhapy.backend.domain.graphdb.reference.IntermediateRegion domain,
+      @MappingTarget IntermediateRegionDTO dto,
+      @Context Map<String, Object> context) {
     String iso3Language = (String) context.get("iso3Language");
     if (StringUtils.isNotBlank(iso3Language)) {
       dto.setName(domain.getNames().getTranslation(iso3Language));
@@ -145,7 +155,8 @@ public abstract class BackendConverterV2 extends BaseConverterV2 {
   }
 
   @AfterMapping
-  protected void afterConvert(Region dto,
+  protected void afterConvert(
+      RegionDTO dto,
       @MappingTarget org.jhapy.backend.domain.graphdb.reference.Region domain,
       @Context Map<String, Object> context) {
 
@@ -156,8 +167,10 @@ public abstract class BackendConverterV2 extends BaseConverterV2 {
   }
 
   @AfterMapping
-  protected void afterConvert(org.jhapy.backend.domain.graphdb.reference.Region domain,
-      @MappingTarget Region dto, @Context Map<String, Object> context) {
+  protected void afterConvert(
+      org.jhapy.backend.domain.graphdb.reference.Region domain,
+      @MappingTarget RegionDTO dto,
+      @Context Map<String, Object> context) {
     String iso3Language = (String) context.get("iso3Language");
     if (StringUtils.isNotBlank(iso3Language)) {
       dto.setName(domain.getNames().getTranslation(iso3Language));
@@ -165,7 +178,8 @@ public abstract class BackendConverterV2 extends BaseConverterV2 {
   }
 
   @AfterMapping
-  protected void afterConvert(SubRegion dto,
+  protected void afterConvert(
+      SubRegionDTO dto,
       @MappingTarget org.jhapy.backend.domain.graphdb.reference.SubRegion domain,
       @Context Map<String, Object> context) {
     String iso3Language = (String) context.get("iso3Language");
@@ -175,8 +189,10 @@ public abstract class BackendConverterV2 extends BaseConverterV2 {
   }
 
   @AfterMapping
-  protected void afterConvert(org.jhapy.backend.domain.graphdb.reference.SubRegion domain,
-      @MappingTarget SubRegion dto, @Context Map<String, Object> context) {
+  protected void afterConvert(
+      org.jhapy.backend.domain.graphdb.reference.SubRegion domain,
+      @MappingTarget SubRegionDTO dto,
+      @Context Map<String, Object> context) {
     String iso3Language = (String) context.get("iso3Language");
     if (StringUtils.isNotBlank(iso3Language)) {
       dto.setName(domain.getNames().getTranslation(iso3Language));

@@ -18,9 +18,11 @@
 
 package org.jhapy.backend.service.reference;
 
-import java.util.List;
 import org.jhapy.backend.domain.graphdb.reference.Region;
 import org.jhapy.baseserver.service.CrudGraphdbService;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * @author jHapy Lead Dev.
@@ -31,5 +33,5 @@ public interface RegionService extends CrudGraphdbService<Region> {
 
   List<Region> findAll();
 
-  Region getById(Long id);
+  Region getById(UUID id);
 }

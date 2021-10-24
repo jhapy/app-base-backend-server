@@ -25,6 +25,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.UUID;
+
 /**
  * @author jHapy Lead Dev.
  * @version 1.0
@@ -32,9 +34,11 @@ import org.springframework.data.repository.query.Param;
  */
 public interface SubRegionRepository extends BaseRepository<SubRegion> {
 
-  @Query(value =
-      "CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', $name) YIELD node RETURN node :#{orderBy(#pageable)} SKIP $skip LIMIT $limit",
-      countQuery = "CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', $name) YIELD node RETURN count(node)")
+  @Query(
+      value =
+          "CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', $name) YIELD node RETURN node :#{orderBy(#pageable)} SKIP $skip LIMIT $limit",
+      countQuery =
+          "CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', $name) YIELD node RETURN count(node)")
   Page<SubRegion> findByName(@Param("name") String name, Pageable pageable);
 
   @Query("CALL db.INDEX.fulltext.queryNodes('SubRegion-Trl', $name) YIELD node RETURN count(node)")
@@ -43,6 +47,6 @@ public interface SubRegionRepository extends BaseRepository<SubRegion> {
   @Query(
       "MATCH (m:SubRegion) WITH m MATCH (c:Country) WHERE id(m) = $subRegionId AND id(c) = $countryId"
           + " CREATE (m)-[r:HAS_COUNTRIES]->(c) RETURN m")
-  SubRegion addCountryToSubRegion(@Param("subRegionId") Long subRegionId,
-      @Param("countryId") Long countryId);
+  SubRegion addCountryToSubRegion(
+      @Param("subRegionId") UUID subRegionId, @Param("countryId") UUID countryId);
 }

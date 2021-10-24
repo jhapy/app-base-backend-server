@@ -18,15 +18,17 @@
 
 package org.jhapy.backend.endpoint.reference;
 
-import java.util.List;
-import java.util.Map;
 import org.jhapy.backend.converter.BackendConverterV2;
 import org.jhapy.backend.domain.graphdb.reference.IntermediateRegion;
 import org.jhapy.backend.service.reference.IntermediateRegionService;
 import org.jhapy.baseserver.endpoint.BaseGraphDbEndpoint;
 import org.jhapy.baseserver.service.CrudGraphdbService;
+import org.jhapy.dto.domain.reference.IntermediateRegionDTO;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author jHapy Lead Dev.
@@ -35,13 +37,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/intermediateRegionService")
-public class IntermediateRegionServiceEndpoint extends
-    BaseGraphDbEndpoint<IntermediateRegion, org.jhapy.dto.domain.reference.IntermediateRegion> {
+public class IntermediateRegionServiceEndpoint
+    extends BaseGraphDbEndpoint<IntermediateRegion, IntermediateRegionDTO> {
 
   private final IntermediateRegionService intermediateRegionService;
 
-  public IntermediateRegionServiceEndpoint(IntermediateRegionService intermediateRegionService,
-      BackendConverterV2 converter) {
+  public IntermediateRegionServiceEndpoint(
+      IntermediateRegionService intermediateRegionService, BackendConverterV2 converter) {
     super(converter);
     this.intermediateRegionService = intermediateRegionService;
   }
@@ -51,27 +53,26 @@ public class IntermediateRegionServiceEndpoint extends
   }
 
   @Override
-  protected org.jhapy.dto.domain.reference.IntermediateRegion convertToDto(
+  protected IntermediateRegionDTO convertToDto(
       IntermediateRegion domain, Map<String, Object> context) {
     return getConverter().convertToDto(domain, context);
   }
 
   @Override
-  protected List<org.jhapy.dto.domain.reference.IntermediateRegion> convertToDtos(
+  protected List<IntermediateRegionDTO> convertToDtos(
       Iterable<IntermediateRegion> domains, Map<String, Object> context) {
     return getConverter().convertToDtoIntermediateRegions(domains, context);
   }
 
   @Override
   protected IntermediateRegion convertToDomain(
-      org.jhapy.dto.domain.reference.IntermediateRegion dto, Map<String, Object> context) {
+      IntermediateRegionDTO dto, Map<String, Object> context) {
     return getConverter().convertToDomain(dto, context);
   }
 
   @Override
   protected List<IntermediateRegion> convertToDomains(
-      Iterable<org.jhapy.dto.domain.reference.IntermediateRegion> dto,
-      Map<String, Object> context) {
+      Iterable<IntermediateRegionDTO> dto, Map<String, Object> context) {
     return getConverter().convertToDomainIntermediateRegions(dto, context);
   }
 

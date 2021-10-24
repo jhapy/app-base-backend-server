@@ -18,13 +18,12 @@
 
 package org.jhapy.backend.endpoint.reference;
 
-import java.util.List;
-import java.util.Map;
 import org.jhapy.backend.converter.BackendConverterV2;
 import org.jhapy.backend.domain.graphdb.reference.Country;
 import org.jhapy.backend.service.reference.CountryService;
 import org.jhapy.baseserver.endpoint.BaseGraphDbEndpoint;
 import org.jhapy.baseserver.service.CrudGraphdbService;
+import org.jhapy.dto.domain.reference.CountryDTO;
 import org.jhapy.dto.serviceQuery.ServiceResult;
 import org.jhapy.dto.serviceQuery.reference.country.GetByIso2OrIso3Query;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +32,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author jHapy Lead Dev.
  * @version 1.0
@@ -40,13 +42,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/countryService")
-public class CountryServiceEndpoint extends
-    BaseGraphDbEndpoint<Country, org.jhapy.dto.domain.reference.Country> {
+public class CountryServiceEndpoint extends BaseGraphDbEndpoint<Country, CountryDTO> {
 
   private final CountryService countryService;
 
-  public CountryServiceEndpoint(CountryService countryService,
-      BackendConverterV2 converter) {
+  public CountryServiceEndpoint(CountryService countryService, BackendConverterV2 converter) {
     super(converter);
     this.countryService = countryService;
   }
@@ -61,26 +61,22 @@ public class CountryServiceEndpoint extends
   }
 
   @Override
-  protected org.jhapy.dto.domain.reference.Country convertToDto(Country domain,
-      Map<String, Object> context) {
+  protected CountryDTO convertToDto(Country domain, Map<String, Object> context) {
     return getConverter().convertToDto(domain, context);
   }
 
   @Override
-  protected List<org.jhapy.dto.domain.reference.Country> convertToDtos(Iterable<Country> domains,
-      Map<String, Object> context) {
+  protected List<CountryDTO> convertToDtos(Iterable<Country> domains, Map<String, Object> context) {
     return getConverter().convertToDtoCountries(domains, context);
   }
 
   @Override
-  protected Country convertToDomain(org.jhapy.dto.domain.reference.Country dto,
-      Map<String, Object> context) {
+  protected Country convertToDomain(CountryDTO dto, Map<String, Object> context) {
     return getConverter().convertToDomain(dto, context);
   }
 
   @Override
-  protected List<Country> convertToDomains(Iterable<org.jhapy.dto.domain.reference.Country> dto,
-      Map<String, Object> context) {
+  protected List<Country> convertToDomains(Iterable<CountryDTO> dto, Map<String, Object> context) {
     return getConverter().convertToDomainCountries(dto, context);
   }
 
@@ -88,8 +84,10 @@ public class CountryServiceEndpoint extends
   public ResponseEntity<ServiceResult> getByIso2OrIso3(@RequestBody GetByIso2OrIso3Query query) {
     var loggerPrefix = getLoggerPrefix("getByIso2OrIso3");
 
-    return handleResult(loggerPrefix,
-        getConverter().convertToDto(countryService.getByIso2OrIso3(query.getIso2OrIso3Name()),
-            getContext(query)));
+    return handleResult(
+        loggerPrefix,
+        getConverter()
+            .convertToDto(
+                countryService.getByIso2OrIso3(query.getIso2OrIso3Name()), getContext(query)));
   }
 }

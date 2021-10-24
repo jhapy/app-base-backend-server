@@ -18,11 +18,13 @@
 
 package org.jhapy.backend.service.user;
 
-import java.util.List;
 import org.jhapy.backend.domain.graphdb.user.BaseUser;
 import org.jhapy.baseserver.service.CrudGraphdbService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * @author jHapy Lead Dev.
@@ -39,5 +41,5 @@ public interface BaseUserService<T extends BaseUser> extends CrudGraphdbService<
 
   List<T> getByEmail(String email);
 
-  T getById(Long id);
+  T getById(UUID id);
 }

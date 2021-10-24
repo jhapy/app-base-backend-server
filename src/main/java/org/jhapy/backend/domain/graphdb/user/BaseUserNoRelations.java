@@ -20,10 +20,12 @@ package org.jhapy.backend.domain.graphdb.user;
 
 import org.jhapy.baseserver.domain.graphdb.BaseEntityNoRelations;
 
+import java.util.UUID;
+
 /**
  * This class represent a User.
  *
- * A User can be : - System user (internal) - Admin user (to administer the platform) - Player or
+ * <p>A User can be : - System user (internal) - Admin user (to administer the platform) - Player or
  * Fan - Owner of a Place
  *
  * @author jHapy Lead Dev
@@ -44,5 +46,5 @@ public interface BaseUserNoRelations extends BaseEntityNoRelations {
 
   String getNickName();
 
-  String getAvatarId();
+  UUID getAvatarId();
 }

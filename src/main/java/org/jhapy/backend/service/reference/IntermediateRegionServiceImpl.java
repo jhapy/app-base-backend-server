@@ -18,8 +18,6 @@
 
 package org.jhapy.backend.service.reference;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.jhapy.backend.domain.graphdb.reference.IntermediateRegion;
 import org.jhapy.backend.repository.graphdb.reference.IntermediateRegionRepository;
@@ -29,6 +27,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author jHapy Lead Dev.
@@ -47,13 +49,12 @@ public class IntermediateRegionServiceImpl implements IntermediateRegionService,
 
   @Override
   public List<IntermediateRegion> findAll() {
-    return intermediateRegionRepository.findAll().stream()
-        .collect(Collectors.toList());
+    return intermediateRegionRepository.findAll().stream().collect(Collectors.toList());
   }
 
   @Override
-  public Page<IntermediateRegion> findAnyMatching(String filter, Boolean showInactive,
-      Pageable pageable) {
+  public Page<IntermediateRegion> findAnyMatching(
+      String filter, Boolean showInactive, Pageable pageable) {
     if (StringUtils.isNotBlank(filter)) {
       return intermediateRegionRepository.findByName(filter, pageable);
     } else {
@@ -71,13 +72,12 @@ public class IntermediateRegionServiceImpl implements IntermediateRegionService,
   }
 
   @Override
-  public IntermediateRegion getById(Long id) {
+  public IntermediateRegion getById(UUID id) {
     return intermediateRegionRepository.findById(id).get();
   }
 
   @Override
-  public Neo4jRepository<IntermediateRegion, Long> getRepository() {
+  public Neo4jRepository<IntermediateRegion, UUID> getRepository() {
     return intermediateRegionRepository;
   }
 }
-

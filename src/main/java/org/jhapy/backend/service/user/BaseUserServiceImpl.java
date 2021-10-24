@@ -18,14 +18,12 @@
 
 package org.jhapy.backend.service.user;
 
-import java.util.List;
-import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.jhapy.backend.domain.graphdb.user.BaseUser;
 import org.jhapy.backend.repository.graphdb.user.BaseUserRepository;
 import org.jhapy.baseserver.client.ResourceService;
 import org.jhapy.dto.domain.exception.UserFriendlyDataException;
-import org.jhapy.dto.serviceQuery.generic.DeleteByStrIdQuery;
+import org.jhapy.dto.serviceQuery.generic.DeleteByIdQuery;
 import org.jhapy.dto.serviceQuery.generic.SaveQuery;
 import org.jhapy.dto.utils.AppContextThread;
 import org.jhapy.dto.utils.StoredFile;
@@ -33,6 +31,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @author jHapy Lead Dev.
@@ -43,14 +45,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class BaseUserServiceImpl<T extends BaseUser> implements BaseUserService<T> {
 
-  public static final String MODIFY_LOCKED_USER_NOT_PERMITTED = "User has been locked and cannot be modified or deleted";
+  public static final String MODIFY_LOCKED_USER_NOT_PERMITTED =
+      "User has been locked and cannot be modified or deleted";
   private static final String DELETING_SELF_NOT_PERMITTED = "You cannot delete your own account";
 
   private final BaseUserRepository<T> userRepository;
   private final ResourceService resourceService;
 
-  public BaseUserServiceImpl(BaseUserRepository userRepository,
-      ResourceService resourceService) {
+  public BaseUserServiceImpl(BaseUserRepository userRepository, ResourceService resourceService) {
     this.userRepository = userRepository;
     this.resourceService = resourceService;
   }
@@ -66,7 +68,7 @@ public class BaseUserServiceImpl<T extends BaseUser> implements BaseUserService<
   }
 
   @Override
-  public T getById(Long id) {
+  public T getById(UUID id) {
     return userRepository.findById(id).get();
   }
 
@@ -82,8 +84,7 @@ public class BaseUserServiceImpl<T extends BaseUser> implements BaseUserService<
   @Override
   public Page<T> findAnyMatching(String filter, Boolean showInactive, Pageable pageable) {
     if (StringUtils.isNotBlank(filter)) {
-      return userRepository
-          .findAnyMatching(filter, pageable);
+      return userRepository.findAnyMatching(filter, pageable);
     } else {
       return userRepository.findAll(pageable);
     }
@@ -92,8 +93,7 @@ public class BaseUserServiceImpl<T extends BaseUser> implements BaseUserService<
   @Override
   public long countAnyMatching(String filter, Boolean showInactive) {
     if (StringUtils.isNotBlank(filter)) {
-      return userRepository
-          .countAnyMatching(filter);
+      return userRepository.countAnyMatching(filter);
     } else {
       return userRepository.count();
     }
@@ -110,13 +110,13 @@ public class BaseUserServiceImpl<T extends BaseUser> implements BaseUserService<
       T previousValue = _previousValue.orElse(null);
       if (previousValue != null) {
         if (previousValue.getAvatarId() != null && entity.getAvatarId() == null) {
-          resourceService.delete(new DeleteByStrIdQuery(previousValue.getAvatarId()));
+          resourceService.delete(new DeleteByIdQuery(previousValue.getAvatarId()));
         }
       }
     } else {
       if (entity.getPreviousAvatarId() != null && entity.getAvatarId() == null) {
         // Image change, remove old one
-        resourceService.delete(new DeleteByStrIdQuery(entity.getPreviousAvatarId()));
+        resourceService.delete(new DeleteByIdQuery(entity.getPreviousAvatarId()));
       }
     }
 
@@ -145,7 +145,7 @@ public class BaseUserServiceImpl<T extends BaseUser> implements BaseUserService<
     throwIfDeletingSelf(entity);
 
     if (entity.getAvatar() != null) {
-      resourceService.delete(new DeleteByStrIdQuery(entity.getAvatar().getId()));
+      resourceService.delete(new DeleteByIdQuery(entity.getAvatar().getId()));
     }
 
     getRepository().delete(entity);
