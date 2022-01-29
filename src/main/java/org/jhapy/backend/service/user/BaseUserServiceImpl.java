@@ -23,10 +23,10 @@ import org.jhapy.backend.domain.graphdb.user.BaseUser;
 import org.jhapy.backend.repository.graphdb.user.BaseUserRepository;
 import org.jhapy.baseserver.client.ResourceService;
 import org.jhapy.dto.domain.exception.UserFriendlyDataException;
+import org.jhapy.dto.domain.resource.StoredFileDTO;
 import org.jhapy.dto.serviceQuery.generic.DeleteByIdQuery;
 import org.jhapy.dto.serviceQuery.generic.SaveQuery;
 import org.jhapy.dto.utils.AppContextThread;
-import org.jhapy.dto.utils.StoredFile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -121,7 +121,7 @@ public class BaseUserServiceImpl<T extends BaseUser> implements BaseUserService<
     }
 
     if (entity.getAvatar() != null && entity.getAvatar().getContent() != null) {
-      StoredFile newImage = resourceService.save(new SaveQuery<>(entity.getAvatar())).getData();
+      StoredFileDTO newImage = resourceService.save(new SaveQuery<>(entity.getAvatar())).getData();
       entity.setAvatar(newImage);
       entity.setAvatarId(newImage.getId());
     }

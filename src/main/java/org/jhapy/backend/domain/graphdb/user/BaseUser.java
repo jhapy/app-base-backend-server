@@ -21,7 +21,7 @@ package org.jhapy.backend.domain.graphdb.user;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.jhapy.baseserver.domain.graphdb.BaseEntity;
-import org.jhapy.dto.utils.StoredFile;
+import org.jhapy.dto.domain.resource.StoredFileDTO;
 import org.springframework.data.annotation.Transient;
 
 import javax.persistence.PostLoad;
@@ -53,7 +53,7 @@ public class BaseUser extends BaseEntity {
 
   private String nickName;
 
-  @Transient private StoredFile avatar = null;
+  @Transient private StoredFileDTO avatar = null;
 
   private UUID avatarId = null;
 
